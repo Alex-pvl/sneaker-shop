@@ -1,0 +1,31 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: sneaker-shop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/eshop
+    username: eshop
+    password: eshop
+    driver-class-name: org.postgresql.Driver
+  jmx:
+    enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+  security:
+    user:
+      name: user
+      password: test
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+  metrics:
+    distribution:
+      percentiles-histogram:
+        "[http.server.requests]": true
+app:
+  jwt:
+    secret: "some secret"

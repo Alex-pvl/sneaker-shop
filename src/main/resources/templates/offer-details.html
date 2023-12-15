@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Offer Details</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header-icons a {
+            display: inline-block;
+            background-color: #2d2d2d; /* Цвет фона */
+            padding: 5px; /* Подберите подходящий отступ */
+            border-radius: 50%; /* Для создания круглых иконок */
+            margin-right: 10px; /* Отступ между иконками (подберите по своему вкусу) */
+        }
+
+        .header-icons a img {
+            width: 32px; /* Установите желаемую ширину и высоту для иконок */
+            height: 32px;
+            background-color: #cecece; /* Цвет иконок */
+            border-radius: 20%; /* Для создания круглых иконок */
+            padding: 5px; /* Подберите подходящий отступ */
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            width: 100px; /* Adjust size as needed */
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.3rem;
+            border: 1px solid #ced4da;
+            width: 100%;
+            margin-right: -1px; /* Aligns the button with the input */
+        }
+
+        .search-container button {
+            margin-left: 5px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.3rem;
+            border: 1px solid #ced4da;
+            background-color: #ffffff;
+            color: #495057;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Clear default browser styles */
+        .search-container input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            border-color: #80bdff;
+        }
+
+        /* Optional: Adjust the search icon inside the button */
+        .search-container button i {
+            color: #495057;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Стили для блока с информацией о продукте */
+        .product-details {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .product-image {
+            flex: 1;
+            max-width: 100%;
+            padding: 20px;
+            margin-left: 50px;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .product-info {
+            flex: 1;
+            max-width: 50%;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-left: 100px;
+            margin-top: 20px;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 0;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        /* Стили для выбора размера */
+        .size-selection {
+            margin-top: 20px;
+        }
+
+        label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"] + span {
+            padding: 8px 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="radio"]:checked + span {
+            background-color: #0056b3;
+        }
+
+        /* Стили для кнопки добавления в корзину */
+        form button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        form button:focus {
+            outline: none;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<header>
+    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+    <div class="search-container">
+        <input type="text" placeholder="Search..." aria-label="Search">
+        <button type="submit">
+            <i class="fas fa-search"></i> <!-- Font Awesome icon -->
+        </button>
+    </div>
+    <div class="header-icons">
+        <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
+        <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
+        <a href="/login"><img src="https://kappa.lol/_N6sE" alt="login"></a>
+        <a href="/register"><img src="https://kappa.lol/_N6sE" alt="register"></a>
+        <a href="/logout"><img src="https://kappa.lol/_N6sE" alt="logout"></a>
+    </div>
+</header>
+<h1>Product Details</h1>
+<div class="product-details">
+    <div class="product-image">
+        <img th:src="${offer.imageUrl}" alt="Product Image" />
+    </div>
+    <div class="product-info">
+        <h2 th:text="${offer.name}"></h2>
+        <p th:text="${offer.brand}"></p>
+        <p th:text="${offer.category}"></p>
+        <p>Price: $<span th:text="${offer.price}"></span></p>
+
+        <!-- Радиокнопки выбора размера -->
+        <div class="size-selection">
+            <h3>Select Size:</h3>
+            <form th:action="@{/addToCart}" method="post">
+                <th:block th:each="size : ${offer.availableSizes}">
+                    <label>
+                        <input type="radio" th:name="selectedSize" th:value="${size}" />
+                        <span th:text="${size}"></span>
+                    </label>
+                </th:block>
+            </form>
+        </div>
+
+        <p>Quantity: <span th:text="${offer.quantity}"></span></p>
+
+        <!-- Кнопка добавления в корзину -->
+        <form th:action="@{/addToCart}" method="post">
+            <input type="hidden" th:name="offerId" th:value="${offer.id}" />
+            <input type="hidden" th:name="selectedSize" /> <!-- Значение выбранного размера будет добавлено через JavaScript -->
+            <button type="submit">Add to Cart</button>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript для обновления выбранного размера -->
+<script>
+    document.querySelectorAll('input[type=radio][name=selectedSize]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            document.querySelector('input[type=hidden][name=selectedSize]').value = this.value;
+        });
+    });
+</script>
+</body>
+</html>

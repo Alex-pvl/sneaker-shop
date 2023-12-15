@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<section layout:fragment="body">
+    <style>
+        .main {
+            padding: 0 10px;
+        }
+
+        @media screen and (max-width: 450px) {
+            .login-form {
+                margin-top: 10%;
+            }
+        }
+        @media screen and (min-width: 768px) {
+            .main {
+                margin-left: 30%;
+            }
+            .sidenav {
+                width: 40%;
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                left: 0;
+            }
+        }
+    </style>
+    <div class="main">
+        <div class="col-md-6 col-sm-12">
+            <div th:if="${param.error}" class="alert alert-success">
+                invalid username and password.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                You have been logged out.
+            </div>
+            <h2>Log in</h2>
+            <div class="login-form">
+                <form th:action="@{/login}" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input
+                            id="username"
+                            type="text"
+                            class="form-control"
+                            placeholder="Username"
+                            name="username"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input
+                            id="password"
+                            type="password"
+                            class="form-control"
+                            placeholder="Password"
+                            name="password"
+                        >
+                    </div>
+                    <a th:href="@{/register}" class="btn btn-black">Don't have an account</a>
+                    <button type="submit" value="Log in" class="btn btn-secondary">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</html>

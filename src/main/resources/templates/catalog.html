@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            width: 100px; /* Adjust size as needed */
+        }
+
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input[type="text"] {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.3rem;
+            border: 1px solid #ced4da;
+            width: 100%;
+            margin-right: -1px; /* Aligns the button with the input */
+        }
+
+        .search-container button {
+            margin-left: 5px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 0.3rem;
+            border: 1px solid #ced4da;
+            background-color: #ffffff;
+            color: #495057;
+            cursor: pointer;
+        }
+
+        .search-container button:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Clear default browser styles */
+        .search-container input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            border-color: #80bdff;
+        }
+
+        /* Optional: Adjust the search icon inside the button */
+        .search-container button i {
+            color: #495057;
+        }
+
+        .category-nav ul {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            background: #f1f1f1;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        .footer {
+            background-color: #b6b6b6;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            padding: 1px 0;
+        }
+
+        .header-icons a {
+            display: inline-block;
+            background-color: #2d2d2d; /* Цвет фона */
+            padding: 5px; /* Подберите подходящий отступ */
+            border-radius: 50%; /* Для создания круглых иконок */
+            margin-right: 10px; /* Отступ между иконками (подберите по своему вкусу) */
+        }
+
+        .header-icons a img {
+            width: 32px; /* Установите желаемую ширину и высоту для иконок */
+            height: 32px;
+            background-color: #cecece; /* Цвет иконок */
+            border-radius: 20%; /* Для создания круглых иконок */
+            padding: 5px; /* Подберите подходящий отступ */
+        }
+
+        .categories-header {
+            margin-left: 50px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            width: 400px;
+        }
+
+        .product-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin: 50px;
+        }
+
+        .product-card {
+            width: calc(33.33% - 10px); /* Рассчитываем ширину карточки с учетом отступов между ними */
+            margin-bottom: 20px; /* Добавляем отступ между карточками (подберите по вашему вкусу) */
+            box-sizing: border-box; /* Включаем box-sizing для учета padding и border в ширине элемента */
+            padding: 10px; /* Добавляем отступы внутри карточек (подберите по вашему вкусу) */
+        }
+
+        .product-image img {
+            max-width: 100%; /* Чтобы изображения внутри карточки подстраивались под ее ширину */
+        }
+
+        .product-details {
+            margin-top: 10px;
+        }
+
+        .original-price {
+            color: black;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<header>
+    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+    <div class="search-container">
+        <input type="text" placeholder="Search..." aria-label="Search">
+        <button type="submit">
+            <i class="fas fa-search"></i> <!-- Font Awesome icon -->
+        </button>
+    </div>
+    <div class="header-icons">
+        <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
+        <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
+        <a href="/login"><img src="https://kappa.lol/_N6sE" alt="login"></a>
+        <a href="/register"><img src="https://kappa.lol/_N6sE" alt="register"></a>
+        <a href="/logout"><img src="https://kappa.lol/_N6sE" alt="logout"></a>
+    </div>
+</header>
+
+<div class="categories-header">
+    <a href="/offers/sneakers">Sneakers</a>
+    <a href="/offers/slippers">Slippers</a>
+    <a href="/offers/women">Women</a>
+    <a href="/offers/kids">Kids</a>
+</div>
+
+<main>
+    <div class="product-list">
+        <th:block th:each="offer : ${offers}">
+            <div class="product-card">
+                <div class="product-image">
+                    <img th:src="${offer.imageUrl}" alt="Product Image" />
+                </div>
+                <div class="product-details">
+                    <span class="product-category" th:text="${offer.category}">Category</span>
+                    <h3 class="product-name">
+                        <a th:href="@{/offers/{id}(id=${offer.id})}" th:text="${offer.name}">Product Name</a>
+                    </h3>
+                    <div class="product-price">
+                        $<span class="original-price" th:text="${offer.price}">Price</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Другие данные -->
+        </th:block>
+    </div>
+</main>
+</body>
+</html>
