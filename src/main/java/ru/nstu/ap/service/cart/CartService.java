@@ -4,11 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nstu.ap.model.cart.Cart;
+import ru.nstu.ap.model.cart.CartItem;
 import ru.nstu.ap.repository.cart.CartRepository;
-import ru.nstu.ap.service.catalog.OfferService;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
@@ -31,16 +30,11 @@ public class CartService {
 	}
 
 	@Transactional
-	public void addOffer(Integer userId, Integer offerId, Integer size) {
-		Cart cart;
-		try {
-			cart = getByUserId(userId);
-		} catch (Exception e) {
-			cart = createEmptyCart(userId);
-		}
+	public CartItem addOffer(Integer userId, Integer offerId, Integer size) {
+		Cart cart = getByUserId(userId);
 		var cartItem = cartItemService.mapFromOffer(cart, offerId, size);
-		cart.getCartItems().add(cartItem);
 		cartRepository.save(cart);
+		return cartItem;
 	}
 
 	@Transactional
@@ -63,11 +57,12 @@ public class CartService {
 		cartRepository.save(cart);
 	}
 
-	private Cart createEmptyCart(Integer userId) {
+	@Transactional
+	public void createEmptyCart(Integer userId) {
 		var cart = new Cart();
 		cart.setCartItems(Collections.emptyList());
 		cart.setUserId(userId);
 		cart.setCost(0.0);
-		return cart;
+		cartRepository.save(cart);
 	}
 }

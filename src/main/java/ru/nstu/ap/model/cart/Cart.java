@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,7 +21,7 @@ public class Cart {
 	private Integer id;
 
 	@OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
-	private List<CartItem> cartItems;
+	private List<CartItem> cartItems = new ArrayList<>();
 
 	@Nullable
 	@Column(name = "id_user")

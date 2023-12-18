@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+<head>
+    <style>
+        .header-icons a {
+            display: inline-block;
+            background-color: #2d2d2d; /* Цвет фона */
+            padding: 5px; /* Подберите подходящий отступ */
+            border-radius: 50%; /* Для создания круглых иконок */
+            margin-right: 10px; /* Отступ между иконками (подберите по своему вкусу) */
+        }
+
+        .header-icons a img {
+            width: 32px; /* Установите желаемую ширину и высоту для иконок */
+            height: 32px;
+            background-color: #cecece; /* Цвет иконок */
+            border-radius: 20%; /* Для создания круглых иконок */
+            padding: 5px; /* Подберите подходящий отступ */
+        }
+
+        header {
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            width: 100px; /* Adjust size as needed */
+        }
+    </style>
+    <meta charset="UTF-8">
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<header style="display: flex">
+    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+    <div class="header-icons">
+        <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
+        <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
+        <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
+        <a href="/logout"><img src="https://kappa.lol/rAEhV" alt="logout"></a>
+    </div>
+</header>
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="https://kappa.lol/teZzU" alt="avatar"
+                             class="rounded-circle img-fluid" style="width: 150px;">
+                        <h5 class="my-3" th:text="${user.name}">Name</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Login</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${user.username}">Username</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0" th:text="${user.email}">Email</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Balance</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">$<a th:text="${user.balance}">Balance</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Add Balance</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <form th:action="@{/addBalance}" method="post">
+                            <div class="form-group">
+                                <input type="number" name="balance" class="form-control" min="0" placeholder="Enter amount">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

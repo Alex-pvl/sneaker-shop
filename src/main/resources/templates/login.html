@@ -6,11 +6,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+    <style>
+        .header-icons a {
+            display: inline-block;
+            background-color: #2d2d2d; /* Цвет фона */
+            padding: 5px; /* Подберите подходящий отступ */
+            border-radius: 50%; /* Для создания круглых иконок */
+            margin-right: 10px; /* Отступ между иконками (подберите по своему вкусу) */
+        }
+
+        .header-icons a img {
+            width: 32px; /* Установите желаемую ширину и высоту для иконок */
+            height: 32px;
+            background-color: #cecece; /* Цвет иконок */
+            border-radius: 20%; /* Для создания круглых иконок */
+            padding: 5px; /* Подберите подходящий отступ */
+        }
+
+        header {
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            width: 100px; /* Adjust size as needed */
+        }
+    </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+<header style="display: flex">
+    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+    <div class="header-icons">
+        <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
+    </div>
+</header>
 <section layout:fragment="body">
     <style>
         .main {
+            margin-top: 20px;
             padding: 0 10px;
         }
 
@@ -34,15 +70,15 @@
     </style>
     <div class="main">
         <div class="col-md-6 col-sm-12">
-            <div th:if="${param.error}" class="alert alert-success">
-                invalid username and password.
+            <div th:if="${param.error}" class="alert alert-danger">
+                Invalid username and password!
             </div>
             <div th:if="${param.logout}" class="alert alert-success">
                 You have been logged out.
             </div>
             <h2>Log in</h2>
             <div class="login-form">
-                <form th:action="@{/login}" method="post">
+                <form th:action="@{/login}" method="post" role="form">
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input

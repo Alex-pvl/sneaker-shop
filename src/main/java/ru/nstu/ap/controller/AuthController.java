@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.nstu.ap.dto.user.RegistrationDTO;
 import ru.nstu.ap.model.user.User;
+import ru.nstu.ap.service.cart.CartService;
 import ru.nstu.ap.service.user.UserService;
 
 @Controller
@@ -38,7 +39,7 @@ public class AuthController {
 		if (existingUserEmail != null && existingUserEmail.getEmail() != null && existingUserEmail.getEmail().isEmpty()) {
 			return "redirect:/register?fail";
 		}
-		User existingUserLogin = userService.getByLogin(user.getUsername());
+		User existingUserLogin = userService.getByUsername(user.getUsername());
 		if (existingUserLogin != null && existingUserLogin.getUsername() != null && existingUserLogin.getUsername().isEmpty()) {
 			return "redirect:/register?fail";
 		}
@@ -47,6 +48,6 @@ public class AuthController {
 			return "register";
 		}
 		userService.saveUser(user);
-		return "redirect:/";
+		return "redirect:/login";
 	}
 }

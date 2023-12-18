@@ -7,14 +7,14 @@ import ru.nstu.ap.model.user.User;
 public class UserDTO {
 	private final Integer id;
 	private final String name;
-	private final String login;
+	private final String username;
 	private final String email;
 	private final Double balance;
 
 	public UserDTO(User user) {
 		this.id = user.getId();
 		this.name = user.getName();
-		this.login = user.getUsername();
+		this.username = user.getUsername();
 		this.email = user.getEmail();
 		this.balance = user.getBalance();
 	}

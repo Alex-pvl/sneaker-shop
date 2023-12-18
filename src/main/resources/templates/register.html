@@ -6,11 +6,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <style>
+        .header-icons a {
+            display: inline-block;
+            background-color: #2d2d2d; /* Цвет фона */
+            padding: 5px; /* Подберите подходящий отступ */
+            border-radius: 50%; /* Для создания круглых иконок */
+            margin-right: 10px; /* Отступ между иконками (подберите по своему вкусу) */
+        }
+
+        .header-icons a img {
+            width: 32px; /* Установите желаемую ширину и высоту для иконок */
+            height: 32px;
+            background-color: #cecece; /* Цвет иконок */
+            border-radius: 20%; /* Для создания круглых иконок */
+            padding: 5px; /* Подберите подходящий отступ */
+        }
+
+        header {
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo {
+            width: 100px; /* Adjust size as needed */
+        }
+    </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+<header style="display: flex">
+    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+    <div class="header-icons">
+        <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
+    </div>
+</header>
     <section layout:fragment="body">
         <style>
             .main {
+                margin-top: 20px;
                 padding: 0 10px;
             }
 
@@ -34,21 +70,12 @@
         </style>
         <div class="main">
             <div class="col-md-6 col-sm-12">
-                <div th:if="${param.fail}" class="alert alert-success">
+                <div th:if="${param.fail}" class="alert alert-danger">
                     Username or email already exists!
                 </div>
                 <h2>Registration</h2>
                 <div class="login-form">
-                    <form method="post" role="form" th:action="@{/register/save}" th:object="${user}">
-                        <div class="form-group">
-                            <label>Username</label>
-                            <input
-                                    type="text"
-                                    class="form-control"
-                                    placeholder="Username"
-                                    th:field="*{username}">
-                        </div>
-                        <p th:if="${#fields.hasErrors('username')}" class="text-danger"></p>
+                    <form method="POST" role="form" th:action="@{/register/save}" th:object="${user}">
                         <div class="form-group">
                             <label for="name">Name</label>
                             <input
@@ -56,28 +83,49 @@
                                     type="text"
                                     class="form-control"
                                     placeholder="Name"
-                                    th:field="*{name}">
+                                    th:field="*{name}"
+                                    name="name"
+                            >
                         </div>
+                        <p th:if="${#fields.hasErrors('name')}" class="text-danger"></p>
                         <div class="form-group">
-                            <label>Email</label>
+                            <label for="username">Username</label>
                             <input
+                                    id="username"
                                     type="text"
                                     class="form-control"
+                                    placeholder="Username"
+                                    th:field="*{username}"
+                                    name="username"
+                            >
+                        </div>
+                        <p th:if="${#fields.hasErrors('username')}" class="text-danger"></p>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input
+                                    id="email"
+                                    type="email"
+                                    class="form-control"
                                     placeholder="Email"
-                                    th:field="*{email}">
+                                    th:field="*{email}"
+                                    name="email"
+                            >
                         </div>
                         <p th:if="${#fields.hasErrors('email')}" class="text-danger"></p>
                         <div class="form-group">
-                            <label>Password</label>
+                            <label for="password">Password</label>
                             <input
+                                    id="password"
                                     type="password"
                                     class="form-control"
                                     placeholder="Password"
-                                    th:field="*{password}">
+                                    th:field="*{password}"
+                                    name="password"
+                            >
                         </div>
                         <p th:if="${#fields.hasErrors('password')}" class="text-danger"></p>
                         <a th:href="@{/login}" class="btn btn-black">Login</a>
-                        <button th:href="@{/register}" type="submit" class="btn btn-secondary">Register</button>
+                        <button type="submit" class="btn btn-secondary">Register</button>
                     </form>
                 </div>
             </div>

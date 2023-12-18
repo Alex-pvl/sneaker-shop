@@ -26,6 +26,3 @@ management:
     distribution:
       percentiles-histogram:
         "[http.server.requests]": true
-app:
-  jwt:
-    secret: "some secret"

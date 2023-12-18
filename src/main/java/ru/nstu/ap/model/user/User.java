@@ -2,12 +2,10 @@ package ru.nstu.ap.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -26,19 +24,16 @@ public class User implements UserDetails {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(nullable = false, length = 20)
+	@Column(nullable = false)
 	@NotNull
-	@Length(min = 2, max = 20)
 	private String name;
 
-	@Column(nullable = false, length = 20, unique = true)
+	@Column(nullable = false, unique = true)
 	@NotNull
-	@Length(min = 1, max = 20)
 	private String username;
 
 	@Column(nullable = false)
 	@NotNull
-	@Email
 	private String email;
 
 	@Column(nullable = false)
