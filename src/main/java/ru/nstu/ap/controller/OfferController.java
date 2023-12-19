@@ -1,12 +1,15 @@
 package ru.nstu.ap.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.nstu.ap.controller.request.CreateOfferParams;
 import ru.nstu.ap.dto.catalog.OfferDTO;
+import ru.nstu.ap.model.catalog.Offer;
 import ru.nstu.ap.service.catalog.OfferService;
+import ru.nstu.ap.utils.SecurityUtil;
 
 import java.util.List;
 
@@ -17,8 +20,18 @@ public class OfferController {
 
 	@GetMapping("/")
 	public String catalogView(Model model) {
+		String username = SecurityUtil.getSessionUser();
 		model.addAttribute("offers", offerService.getOffers(OfferDTO::new));
+		model.addAttribute("isAdmin", username.equals("admin"));
 		return "catalog";
+	}
+
+	@GetMapping("/admin/offers")
+	public String adminOffers(Model model) {
+		String username = SecurityUtil.getSessionUser();
+		model.addAttribute("isAdmin", username.equals("admin"));
+		adminViewOffers(1, model);
+		return "admin-offers-index";
 	}
 
 	@GetMapping("/catalog")
@@ -55,16 +68,20 @@ public class OfferController {
 		return "catalog";
 	}
 
-	@PostMapping("/admin/offers")
-	public OfferDTO create(@RequestBody CreateOfferParams params) {
-		return new OfferDTO(offerService.create(
-			params.name(),
-			params.brandId(),
-			params.categoryId(),
-			params.price(),
-			params.quantity(),
-			params.imageUrl()
-		));
+	@GetMapping("/page/{pageNo}")
+	public String adminViewOffers(@PathVariable int pageNo, Model model) {
+		String username = SecurityUtil.getSessionUser();
+		if (username == null || !username.equals("admin")) {
+			return "redirect:/login";
+		}
+		int pageSize = 5;
+		Page<OfferDTO> page = offerService.findPaginated(pageNo, pageSize).map(OfferDTO::new);
+		List<OfferDTO> list = page.getContent();
+		model.addAttribute("currentPage", pageNo);
+		model.addAttribute("totalPages", page.getTotalPages());
+		model.addAttribute("totalItems", page.getTotalElements());
+		model.addAttribute("offers", list);
+		return "admin-offers-index";
 	}
 
 }

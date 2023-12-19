@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Offers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 5px;
+            text-align: center;
+            border: none;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #e6e6e6;
+        }
+
+        .table tr:hover {
+            background-color: #ddd;
+        }
+
+        .btn {
+            font-family: Arial, sans-serif;
+        }
+
+        .btn-primary {
+            color: #fff;
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div class="container my-2">
+    <h1>Offer list</h1>
+    <a th:href="@{/admin/addOffer}" class="btn btn-primary btn-sm mb-3">Add offer</a>
+    <table border="1" class = "table table-responsive-md">
+        <thead class="thead-dark">
+        <tr>
+            <th>Name</th>
+            <th>Brand</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Sizes</th>
+            <th>Quantity</th>
+            <th>Image URL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="offer : ${offers}">
+            <td th:text="${offer.name}"></td>
+            <td th:text="${offer.brand}"></td>
+            <td th:text="${offer.category}"></td>
+            <td th:text="${offer.price}"></td>
+            <td th:text="${offer.availableSizes}"></td>
+            <td th:text="${offer.quantity}"></td>
+            <td th:text="${offer.imageUrl}"></td>
+            <td>
+                <a th:href="@{/admin/updateOffer/{id}(id=${offer.id})}" class="btn btn-primary">Update</a>
+                <a th:href="@{/admin/deleteOffer/{id}(id=${offer.id})}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:if = "${totalPages > 1}">
+        <div class = "row col-sm-10">
+            <div class = "col-sm-2">
+                All: [[${totalItems}]]
+            </div>
+            <div class = "col-sm-1">
+                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+                </span>
+            </div>
+            <div class = "col-sm-1">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}}">&gt;</a>
+                <span th:unless="${currentPage < totalPages}">&gt;</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

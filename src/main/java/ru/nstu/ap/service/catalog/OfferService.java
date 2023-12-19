@@ -1,8 +1,12 @@
 package ru.nstu.ap.service.catalog;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.nstu.ap.dto.catalog.OfferDTO;
 import ru.nstu.ap.model.catalog.Offer;
 import ru.nstu.ap.model.catalog.OfferFilterParams;
 import ru.nstu.ap.model.catalog.OfferSize;
@@ -76,5 +80,11 @@ public class OfferService {
 				Objects.requireNonNull(o.getCategory()).getId().equals(categoryId)
 			)
 			.toList();
+	}
+
+	@Transactional(readOnly = true)
+	public Page<Offer> findPaginated(int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+		return offerRepository.findAll(pageable);
 	}
 }
