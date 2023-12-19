@@ -21,6 +21,16 @@ public class OfferController {
 		return "catalog";
 	}
 
+	@GetMapping("/catalog")
+	public String catalogCategoryView(
+		@RequestParam("categoryId") int categoryId,
+		Model model
+	) {
+		var filteredOffers = offerService.getAll().stream().filter(o -> o.getCategory().getId() == categoryId).toList();
+		model.addAttribute("offers", filteredOffers.stream().map(OfferDTO::new));
+		return "catalog";
+	}
+
 	@GetMapping("/offers")
 	public List<OfferDTO> getAll() {
 		return offerService.getOffers(OfferDTO::new);

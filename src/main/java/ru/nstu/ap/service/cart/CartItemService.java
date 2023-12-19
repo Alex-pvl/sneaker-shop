@@ -50,7 +50,7 @@ public class CartItemService {
 	}
 
 	@Transactional
-	public void incrementQuantity(Integer id, Integer cartId) {
+	public CartItem incrementQuantity(Integer id, Integer cartId) {
 		var item = getById(id);
 		var cart = item.getCart();
 		if (!Objects.equals(cartId, cart.getId())) {
@@ -58,10 +58,11 @@ public class CartItemService {
 		}
 		item.incrementQuantity();
 		cartItemRepository.save(item);
+		return item;
 	}
 
 	@Transactional
-	public void decrementQuantity(Integer id, Integer cartId) {
+	public CartItem decrementQuantity(Integer id, Integer cartId) {
 		var item = getById(id);
 		var cart = item.getCart();
 		if (!Objects.equals(cartId, cart.getId())) {
@@ -70,9 +71,10 @@ public class CartItemService {
 		if (item.getQuantity() > 1) {
 			item.decrementQuantity();
 		} else {
-			return;
+			throw new IllegalArgumentException("");
 		}
 		cartItemRepository.save(item);
+		return item;
 	}
 
 	public void delete(Integer id) {

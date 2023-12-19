@@ -33,17 +33,21 @@ public class CartService {
 	public CartItem addOffer(Integer userId, Integer offerId, Integer size) {
 		Cart cart = getByUserId(userId);
 		var cartItem = cartItemService.mapFromOffer(cart, offerId, size);
+		cart.addCost(cartItem.getOffer().getPrice());
 		cartRepository.save(cart);
 		return cartItem;
 	}
 
 	@Transactional
 	public void updateItem(Integer userId, Integer cartItemId, boolean increment) {
-		var cart = getByUserId(userId);
+		Cart cart = getByUserId(userId);
+		CartItem item = null;
 		if (increment) {
-			cartItemService.incrementQuantity(cartItemId, cart.getId());
+			item = cartItemService.incrementQuantity(cartItemId, cart.getId());
+			cart.addCost(item.getOffer().getPrice());
 		} else {
-			cartItemService.decrementQuantity(cartItemId, cart.getId());
+			item = cartItemService.decrementQuantity(cartItemId, cart.getId());
+			cart.subtractCost(item.getOffer().getPrice());
 		}
 		cartRepository.save(cart);
 	}
@@ -51,9 +55,7 @@ public class CartService {
 	@Transactional
 	public void deleteItem(Integer userId, Integer cartItemId) {
 		var cart = getByUserId(userId);
-		var item = cartItemService.getById(cartItemId);
 		cartItemService.delete(cartItemId);
-		cart.getCartItems().remove(item);
 		cartRepository.save(cart);
 	}
 

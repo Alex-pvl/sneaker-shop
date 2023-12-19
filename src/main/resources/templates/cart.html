@@ -6,18 +6,18 @@
     <style>
       .header-icons a {
         display: inline-block;
-        background-color: #2d2d2d; /* Цвет фона */
-        padding: 5px; /* Подберите подходящий отступ */
-        border-radius: 50%; /* Для создания круглых иконок */
-        margin-right: 10px; /* Отступ между иконками (подберите по своему вкусу) */
+        background-color: #2d2d2d;
+        padding: 5px;
+        border-radius: 50%;
+        margin-right: 10px;
       }
 
       .header-icons a img {
-        width: 32px; /* Установите желаемую ширину и высоту для иконок */
+        width: 32px;
         height: 32px;
-        background-color: #cecece; /* Цвет иконок */
-        border-radius: 20%; /* Для создания круглых иконок */
-        padding: 5px; /* Подберите подходящий отступ */
+        background-color: #cecece;
+        border-radius: 20%;
+        padding: 5px;
       }
 
       header {
@@ -29,7 +29,7 @@
       }
 
       .logo {
-        width: 100px; /* Adjust size as needed */
+        width: 100px;
       }
 
       .product-image {
@@ -37,7 +37,12 @@
         height: auto;
       }
 
+      table {
+        text-align: center;
+      }
+
       .table-container {
+        display: inline-block;
         overflow-x: auto;
       }
 
@@ -50,13 +55,13 @@
 </head>
 <body>
 <header style="display: flex">
-    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
-    <div class="header-icons">
-      <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
-      <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
-      <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
-      <a href="/profile"><img src="https://kappa.lol/_N6sE" alt="profile"></a>
-    </div>
+  <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+  <div class="header-icons">
+    <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
+    <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
+    <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
+    <a href="/profile"><img src="https://kappa.lol/_N6sE" alt="profile"></a>
+  </div>
 </header>
 <div class="container mt-5">
   <h1>Shopping Cart</h1>
@@ -65,7 +70,7 @@
       <thead>
       <tr>
         <th>Image</th>
-        <th>Name</th>
+        <th>Offer</th>
         <th>Quantity</th>
         <th>Size</th>
         <th>Actions</th>
@@ -74,48 +79,38 @@
       <tbody>
       <tr th:each="item : ${cart.cartItems}">
         <td><img class="product-image" th:src="${item.offer.imageUrl}" alt="Product Image"></td>
-        <td th:text="${item.offer.name}">Product Name</td>
+        <td>
+          <a th:href="@{/offers/{id}(id=${item.offer.id})}" th:text="${item.offer.name}">Product Name</a>
+        </td>
         <td>
           <div class="input-group">
-            <div class="input-group-prepend">
-              <button class="btn btn-outline-secondary" type="button" th:onclick="'javascript:decrementQuantity(\'' + ${item.id} + '\')'">-</button>
-            </div>
-            <input type="text" class="form-control" th:value="${item.quantity}" readonly>
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="button" th:onclick="'javascript:incrementQuantity(\'' + ${item.id} + '\')'">+</button>
-            </div>
+            <form th:action="@{/decrementQuantity}" method="post">
+              <input type="hidden" name="cartItemId" th:value="${item.id}">
+              <button class="btn btn-outline-secondary" type="submit" th:attr="disabled=${item.quantity == 1}">-</button>
+            </form>
+            <input type="text" class="form-control text-center" style="width: 40px" th:value="${item.quantity}" readonly>
+            <form th:action="@{/incrementQuantity}" method="post">
+              <input type="hidden" name="cartItemId" th:value="${item.id}">
+              <button class="btn btn-outline-secondary" type="submit">+</button>
+            </form>
           </div>
         </td>
         <td th:text="${item.size}">Size</td>
         <td>
-          <button class="btn btn-danger" type="button" th:onclick="'javascript:removeItem(\'' + ${item.id} + '\')'">Remove</button>
+          <form th:action="@{/removeItem}" method="post">
+            <input type="hidden" name="cartItemId" th:value="${item.id}">
+            <button class="btn btn-danger" type="submit">Remove</button>
+          </form>
         </td>
       </tr>
       </tbody>
     </table>
+    <div class="total-cost-container">
+      <p>Total Cost: <span th:text="${cart.cost}">$0.00</span></p>
+      <a href="/createOrder" class="btn btn-primary">Create Order</a>
+    </div>
   </div>
-  <div class="total-cost-container">
-    <p>Total Cost: <span th:text="${cart.cost}">$0.00</span></p>
-    <a href="#" class="btn btn-primary">Create Order</a>
-  </div>
+
 </div>
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
-
-<script th:inline="javascript">
-  function incrementQuantity(itemId) {
-    // Add logic here to increment the quantity of the item with the given ID
-  }
-
-  function decrementQuantity(itemId) {
-    // Add logic here to decrement the quantity of the item with the given ID
-  }
-
-  function removeItem(itemId) {
-    // Add logic here to remove the item with the given ID from the cart
-  }
-</script>
 </body>
 </html>

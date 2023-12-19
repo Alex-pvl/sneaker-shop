@@ -29,4 +29,12 @@ public class Cart {
 
 	@NotNull
 	private Double cost;
+
+	public void addCost(Double amount) {
+		this.cost += amount;
+	}
+
+	public void subtractCost(Double amount) {
+		this.cost -= amount;
+	}
 }
