@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -18,8 +20,8 @@ public class Order {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
-	private List<OrderItem> orderItems;
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<OrderItem> orderItems = new ArrayList<>();
 
 	@Enumerated(value = EnumType.STRING)
 	private OrderStatus status;
@@ -27,9 +29,12 @@ public class Order {
 	@Column(name = "id_user")
 	private Integer userId;
 
+	@Column(name = "created_at")
+	private Date createdAt;
+
 	@NotNull
 	private Double cost;
 
-	@Transient
+	@Column(name = "is_paid")
 	private boolean isPaid;
 }

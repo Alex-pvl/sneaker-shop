@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.nstu.ap.model.cart.Cart;
 import ru.nstu.ap.model.cart.CartItem;
 import ru.nstu.ap.model.order.OrderItem;
+import ru.nstu.ap.repository.catalog.OfferRepository;
 import ru.nstu.ap.repository.order.OrderItemRepository;
 import ru.nstu.ap.repository.order.OrderRepository;
 
@@ -20,6 +21,8 @@ public class OrderItemService {
 	private OrderItemRepository orderItemRepository;
 	@Autowired
 	private OrderRepository orderRepository;
+	@Autowired
+	private OfferRepository offerRepository;
 
 	@Transactional(readOnly = true)
 	public <T> List<T> getOrderItemsByOrderId(Integer orderId, Function<OrderItem, T> mapper) {
@@ -98,13 +101,11 @@ public class OrderItemService {
 	}
 
 	@Transactional
-	public void delete(Integer id, Integer orderId) {
-		var order = orderRepository.findById(orderId)
-			.orElseThrow(IllegalArgumentException::new);
-
-		var item = orderItemRepository.findById(id)
-			.orElseThrow(IllegalArgumentException::new);
-
-		orderItemRepository.delete(item);
+	public void delete(Integer id) {
+		var item = orderItemRepository.findOrderItemById(id);
+		item.getOffer().incrementQuantity(item.getQuantity());
+		item.getOffer().setAvailable(item.getOffer().getQuantity() > 0);
+		offerRepository.save(item.getOffer());
+		orderItemRepository.deleteById(id);
 	}
 }

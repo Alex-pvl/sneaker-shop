@@ -53,11 +53,16 @@ public class Offer {
 	@Column(name = "image_url", nullable = false)
 	private String imageUrl;
 
+	@NotNull
+	@Column(name = "is_available")
+	private boolean isAvailable;
+
 	public void incrementQuantity(int i) {
 		quantity+=i;
 	}
 
 	public void decrementQuantity(int i) {
 		quantity-=i;
+		this.isAvailable = this.quantity > 0;
 	}
 }

@@ -77,6 +77,7 @@ public class CartItemService {
 		return item;
 	}
 
+	@Transactional
 	public void delete(Integer id) {
 		cartItemRepository.deleteById(id);
 	}

@@ -14,6 +14,7 @@ public class CartDTO {
 	private final List<CartItemDTO> cartItems;
 	private final List<OfferDTO> offers;
 	private final Double cost;
+	private final boolean isEmpty;
 
 	public CartDTO(Cart cart) {
 		this.id = cart.getId();
@@ -24,5 +25,6 @@ public class CartDTO {
 			.map(i -> i.getOffer().getPrice() * i.getQuantity())
 			.mapToDouble(Double::doubleValue)
 			.sum();
+		this.isEmpty = cart.getCartItems().isEmpty();
 	}
 }

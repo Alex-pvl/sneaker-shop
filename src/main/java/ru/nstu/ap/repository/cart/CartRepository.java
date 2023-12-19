@@ -6,4 +6,5 @@ import ru.nstu.ap.model.cart.Cart;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Integer> {
+	void deleteAllByUserId(Integer userId);
 }

@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>Cart</title>
     <style>
+      header {
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background: #2d2d2d;
+        border-bottom: 1px solid #ddd;
+      }
+
       .header-icons a {
         display: inline-block;
         background-color: #2d2d2d;
@@ -13,19 +21,11 @@
       }
 
       .header-icons a img {
-        width: 32px;
-        height: 32px;
+        width: 42px;
+        height: 42px;
         background-color: #cecece;
         border-radius: 20%;
         padding: 5px;
-      }
-
-      header {
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 20px;
-        background: #2d2d2d;
-        border-bottom: 1px solid #ddd;
       }
 
       .logo {
@@ -38,17 +38,24 @@
       }
 
       table {
+        width: 100%;
+        border-collapse: collapse;
         text-align: center;
       }
 
       .table-container {
-        display: inline-block;
         overflow-x: auto;
       }
 
       .total-cost-container {
         display: inline-block;
         margin-left: 20px;
+      }
+
+      .btn-clear, .btn-order {
+        max-width: 150px;
+        display: inline-block;
+        margin-top: 10px;
       }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -63,7 +70,7 @@
     <a href="/profile"><img src="https://kappa.lol/_N6sE" alt="profile"></a>
   </div>
 </header>
-<div class="container mt-5">
+<div class="container mt-2">
   <h1>Shopping Cart</h1>
   <div class="table-container">
     <table class="table">
@@ -88,7 +95,7 @@
               <input type="hidden" name="cartItemId" th:value="${item.id}">
               <button class="btn btn-outline-secondary" type="submit" th:attr="disabled=${item.quantity == 1}">-</button>
             </form>
-            <input type="text" class="form-control text-center" style="width: 40px" th:value="${item.quantity}" readonly>
+            <input type="text" class="form-control text-center" style="width: 60px" th:value="${item.quantity}" readonly>
             <form th:action="@{/incrementQuantity}" method="post">
               <input type="hidden" name="cartItemId" th:value="${item.id}">
               <button class="btn btn-outline-secondary" type="submit">+</button>
@@ -97,7 +104,7 @@
         </td>
         <td th:text="${item.size}">Size</td>
         <td>
-          <form th:action="@{/removeItem}" method="post">
+          <form th:action="@{/removeCartItem}" method="post">
             <input type="hidden" name="cartItemId" th:value="${item.id}">
             <button class="btn btn-danger" type="submit">Remove</button>
           </form>
@@ -107,10 +114,14 @@
     </table>
     <div class="total-cost-container">
       <p>Total Cost: <span th:text="${cart.cost}">$0.00</span></p>
-      <a href="/createOrder" class="btn btn-primary">Create Order</a>
+      <form th:if="${!cart.isEmpty}" th:action="@{/createOrder}" method="post" class="btn-order">
+        <button type="submit" class="btn btn-primary">Create Order</button>
+      </form>
+      <form th:if="${!cart.isEmpty}" th:action="@{/clearCart}" method="post" class="btn-clear">
+        <button type="submit" class="btn btn-danger">Clear Cart</button>
+      </form>
     </div>
   </div>
-
 </div>
 </body>
 </html>

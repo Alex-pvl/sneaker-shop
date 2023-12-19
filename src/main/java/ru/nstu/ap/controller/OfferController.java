@@ -26,7 +26,7 @@ public class OfferController {
 		@RequestParam("categoryId") int categoryId,
 		Model model
 	) {
-		var filteredOffers = offerService.getAll().stream().filter(o -> o.getCategory().getId() == categoryId).toList();
+		var filteredOffers = offerService.getAllByCategory(categoryId);
 		model.addAttribute("offers", filteredOffers.stream().map(OfferDTO::new));
 		return "catalog";
 	}
@@ -46,6 +46,13 @@ public class OfferController {
 	@PostMapping("/offers/{id}")
 	public OfferDTO getById(@PathVariable Integer id, @RequestBody Integer size) {
 		return new OfferDTO(offerService.getById(id));
+	}
+
+	@PostMapping("/search")
+	public String search(@RequestParam("searchText") String searchText, Model model) {
+		var offers = offerService.searchByName(searchText).stream().map(OfferDTO::new).toList();
+		model.addAttribute("offers", offers);
+		return "catalog";
 	}
 
 	@PostMapping("/admin/offers")

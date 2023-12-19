@@ -6,4 +6,5 @@ import ru.nstu.ap.model.order.Order;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Integer> {
+	Order findOrderById(Integer id);
 }

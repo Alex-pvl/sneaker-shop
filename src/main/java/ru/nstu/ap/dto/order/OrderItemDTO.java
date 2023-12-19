@@ -1,12 +1,13 @@
 package ru.nstu.ap.dto.order;
 
 import lombok.Getter;
+import ru.nstu.ap.dto.catalog.OfferDTO;
 import ru.nstu.ap.model.order.OrderItem;
 
 @Getter
 public class OrderItemDTO {
 	private final Integer id;
-	private final Integer offerId;
+	private final OfferDTO offer;
 	private final String name;
 	private final String imageUrl;
 	private final Integer quantity;
@@ -15,7 +16,7 @@ public class OrderItemDTO {
 
 	public OrderItemDTO(OrderItem item) {
 		this.id = item.getId();
-		this.offerId = item.getOffer().getId();
+		this.offer = new OfferDTO(item.getOffer());
 		this.name = item.getOffer().getName();
 		this.imageUrl = item.getOffer().getImageUrl();
 		this.quantity = item.getQuantity();

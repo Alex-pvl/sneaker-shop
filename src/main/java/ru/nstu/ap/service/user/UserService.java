@@ -24,6 +24,11 @@ public class UserService {
 	private CartService cartService;
 
 	@Transactional(readOnly = true)
+	public User getById(Integer id) {
+		return userRepository.findUserById(id);
+	}
+
+	@Transactional(readOnly = true)
 	public User getByEmail(String email) {
 		return userRepository.findUserByEmail(email);
 	}

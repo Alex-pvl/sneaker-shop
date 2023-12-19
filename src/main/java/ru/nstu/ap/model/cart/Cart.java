@@ -20,7 +20,7 @@ public class Cart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@OneToMany(mappedBy = "cart", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "cart", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<CartItem> cartItems = new ArrayList<>();
 
 	@Nullable
@@ -29,6 +29,9 @@ public class Cart {
 
 	@NotNull
 	private Double cost;
+
+	@Transient
+	private boolean isEmpty;
 
 	public void addCost(Double amount) {
 		this.cost += amount;

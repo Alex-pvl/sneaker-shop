@@ -27,7 +27,7 @@ public class OrderDTO {
 		this.offers = order.getOrderItems().stream().map(OrderItem::getOffer).map(OfferDTO::new).toList();
 		this.status = order.getStatus();
 		this.isPaid = order.isPaid();
-		this.createdAt = new Date();
+		this.createdAt = order.getCreatedAt();
 		this.cost = order.getOrderItems().stream()
 			.map(i -> i.getOffer().getPrice() * i.getQuantity())
 			.mapToDouble(Double::doubleValue)

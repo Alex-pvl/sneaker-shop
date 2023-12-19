@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <style>
+        header {
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header-icons a {
+            display: inline-block;
+            background-color: #2d2d2d; /* Цвет фона */
+            padding: 5px; /* Подберите подходящий отступ */
+            border-radius: 50%; /* Для создания круглых иконок */
+            margin-right: 10px; /* Отступ между иконками (подберите по своему вкусу) */
+        }
+
+        .header-icons a img {
+            width: 42px; /* Установите желаемую ширину и высоту для иконок */
+            height: 42px;
+            background-color: #cecece; /* Цвет иконок */
+            border-radius: 20%; /* Для создания круглых иконок */
+            padding: 5px; /* Подберите подходящий отступ */
+        }
+
+        .logo {
+            width: 100px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th, td {
+            padding: 8px;
+        }
+
+        td {
+            white-space: nowrap;
+        }
+
+        .date-cell {
+            white-space: nowrap;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<header style="display: flex">
+    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+    <div class="header-icons">
+        <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
+        <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
+        <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
+        <a href="/profile"><img src="https://kappa.lol/_N6sE" alt="profile"></a>
+    </div>
+</header>
+<div class="container mt-2">
+    <h1>Orders</h1>
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Cost</th>
+                <th>Created</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td>
+                    <p th:text="${order.id}">ID</p>
+                </td>
+                <td>
+                    <p th:text="${order.status}">Status</p>
+                </td>
+                <td>
+                    $<a th:text="${order.cost}">Cost</a>
+                </td>
+                <td class="date-cell">
+                    <p th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy hh:mm:ss')}">Created At</p>
+                </td>
+                <td>
+                    <a th:href="@{/orders/{id}(id=${order.id})}">View</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

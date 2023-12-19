@@ -30,18 +30,17 @@ public class CartService {
 	}
 
 	@Transactional
-	public CartItem addOffer(Integer userId, Integer offerId, Integer size) {
+	public void addOffer(Integer userId, Integer offerId, Integer size) {
 		Cart cart = getByUserId(userId);
+		cart.setEmpty(false);
 		var cartItem = cartItemService.mapFromOffer(cart, offerId, size);
 		cart.addCost(cartItem.getOffer().getPrice());
-		cartRepository.save(cart);
-		return cartItem;
 	}
 
 	@Transactional
 	public void updateItem(Integer userId, Integer cartItemId, boolean increment) {
 		Cart cart = getByUserId(userId);
-		CartItem item = null;
+		CartItem item;
 		if (increment) {
 			item = cartItemService.incrementQuantity(cartItemId, cart.getId());
 			cart.addCost(item.getOffer().getPrice());
@@ -60,11 +59,20 @@ public class CartService {
 	}
 
 	@Transactional
-	public void createEmptyCart(Integer userId) {
+	public void clear(Integer userId) {
+		var cart = getByUserId(userId);
+		cart.setEmpty(true);
+		cartRepository.deleteAllByUserId(userId);
+	}
+
+	@Transactional
+	public Cart createEmptyCart(Integer userId) {
 		var cart = new Cart();
 		cart.setCartItems(Collections.emptyList());
 		cart.setUserId(userId);
+		cart.setEmpty(true);
 		cart.setCost(0.0);
 		cartRepository.save(cart);
+		return cart;
 	}
 }

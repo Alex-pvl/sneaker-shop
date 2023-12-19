@@ -16,6 +16,7 @@ public class OfferDTO {
 	private final List<Integer> availableSizes;
 	private final Integer quantity;
 	private final String imageUrl;
+	private final boolean isAvailable;
 
 	public OfferDTO(Offer offer) {
 		this.id = offer.getId();
@@ -26,5 +27,6 @@ public class OfferDTO {
 		this.availableSizes = offer.getSizes().stream().map(OfferSize::getSize).toList();
 		this.quantity = offer.getQuantity();
 		this.imageUrl = offer.getImageUrl();
+		this.isAvailable = offer.isAvailable();
 	}
 }

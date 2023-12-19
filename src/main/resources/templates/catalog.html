@@ -77,15 +77,6 @@
             list-style-type: none;
         }
 
-        .footer {
-            background-color: #b6b6b6;
-            text-align: center;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            padding: 1px 0;
-        }
-
         .header-icons a {
             display: inline-block;
             background-color: #2d2d2d; /* Цвет фона */
@@ -106,7 +97,21 @@
             margin-left: 50px;
             margin-top: 20px;
             margin-bottom: 20px;
-            width: 400px;
+            text-align: center;
+        }
+
+        .categories-header .btn-link {
+            text-decoration: none;
+            color: #333; /* Default link color */
+            font-size: 18px; /* Increase font size */
+            border-radius: 20px; /* Add rounded borders */
+            padding: 10px 20px; /* Add padding for a larger clickable area */
+            transition: all 0.3s ease; /* Smooth transition */
+        }
+
+        .categories-header .btn-link.active {
+            font-weight: bold;
+            color: #007bff; /* Active link color */
         }
 
         .product-list {
@@ -117,14 +122,14 @@
         }
 
         .product-card {
-            width: calc(33.33% - 10px); /* Рассчитываем ширину карточки с учетом отступов между ними */
-            margin-bottom: 20px; /* Добавляем отступ между карточками (подберите по вашему вкусу) */
-            box-sizing: border-box; /* Включаем box-sizing для учета padding и border в ширине элемента */
-            padding: 10px; /* Добавляем отступы внутри карточек (подберите по вашему вкусу) */
+            width: calc(33.33% - 10px); /* Calculate the card width with margins between them */
+            margin-bottom: 20px; /* Add spacing between cards (adjust as needed) */
+            box-sizing: border-box; /* Include padding and border in the element's width */
+            padding: 10px; /* Add padding inside the cards (adjust as needed) */
         }
 
         .product-image img {
-            max-width: 100%; /* Чтобы изображения внутри карточки подстраивались под ее ширину */
+            max-width: 100%; /* Ensure images inside the cards adapt to the card's width */
         }
 
         .product-details {
@@ -134,18 +139,24 @@
         .original-price {
             color: black;
         }
+
+        /* Remove underline and make links blue */
+        .product-name a {
+            text-decoration: none;
+            color: #007bff; /* Blue link color */
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <header>
     <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
-    <div class="search-container">
-        <input type="text" placeholder="Search..." aria-label="Search">
+    <form class="search-container" th:action="@{/search}" method="post">
+        <input type="text" placeholder="Search..." aria-label="Search" name="searchText">
         <button type="submit">
             <i class="fas fa-search"></i> <!-- Font Awesome icon -->
         </button>
-    </div>
+    </form>
     <div class="header-icons">
         <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
         <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
@@ -154,10 +165,11 @@
 </header>
 
 <div class="categories-header">
-    <a href="/catalog?categoryId=1">Sneakers</a>
-    <a href="/catalog?categoryId=2">Slippers</a>
-    <a href="/catalog?categoryId=4">Women</a>
-    <a href="/catalog?categoryId=3">Kids</a>
+    <a href="/" class="btn btn-link btn-rounded active">All</a>
+    <a href="/catalog?categoryId=1" class="btn btn-link btn-rounded">Sneakers</a>
+    <a href="/catalog?categoryId=2" class="btn btn-link btn-rounded">Slippers</a>
+    <a href="/catalog?categoryId=4" class="btn btn-link btn-rounded">Women</a>
+    <a href="/catalog?categoryId=3" class="btn btn-link btn-rounded">Kids</a>
 </div>
 
 <main>
@@ -165,10 +177,10 @@
         <th:block th:each="offer : ${offers}">
             <div class="product-card">
                 <div class="product-image">
-                    <img th:src="${offer.imageUrl}" alt="Product Image" />
+                    <img th:src="${offer.imageUrl}" alt="Product Image" class="img-fluid">
                 </div>
                 <div class="product-details">
-                    <span class="product-category" th:text="${offer.category}">Category</span>
+                    <span class="product-category badge bg-primary" th:text="${offer.category}">Category</span>
                     <h3 class="product-name">
                         <a th:href="@{/offers/{id}(id=${offer.id})}" th:text="${offer.name}">Product Name</a>
                     </h3>
@@ -177,7 +189,7 @@
                     </div>
                 </div>
             </div>
-            <!-- Другие данные -->
+            <!-- Other data -->
         </th:block>
     </div>
 </main>

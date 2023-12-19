@@ -64,6 +64,7 @@ public class OfferService {
 		}).toList());
 		offer.setQuantity(quantity);
 		offer.setImageUrl(imageUrl);
+		offer.setAvailable(offer.getQuantity() > 0);
 		offerRepository.save(offer);
 		return offer;
 	}
@@ -74,15 +75,6 @@ public class OfferService {
 			.filter(o ->
 				Objects.requireNonNull(o.getCategory()).getId().equals(categoryId)
 			)
-			.toList();
-	}
-
-	@Transactional(readOnly = true)
-	public List<Offer> getOffersWithFilters(OfferFilterParams filterParams) {
-		return getAll().stream()
-			.filter(o -> (filterParams.getFromPrice() == null || o.getPrice().compareTo(filterParams.getFromPrice()) >= 0) && (filterParams.getToPrice() == null || o.getPrice().compareTo(filterParams.getToPrice()) <= 0))
-			.filter(o -> filterParams.getBrandId() == null || o.getBrand().getId().equals(filterParams.getBrandId()))
-			.filter(o -> filterParams.getSize() == null || offerRepository.hasSize(filterParams.getSize()) > 0)
 			.toList();
 	}
 }
