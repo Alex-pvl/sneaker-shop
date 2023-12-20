@@ -5,6 +5,34 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Offers</title>
     <style>
+        header {
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header-icons a {
+            display: inline-block;
+            background-color: #2d2d2d;
+            padding: 5px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .header-icons a img {
+            width: 42px;
+            height: 42px;
+            background-color: #cecece;
+            border-radius: 20%;
+            padding: 5px;
+        }
+
+        .logo {
+            width: 100px;
+        }
+
         body {
             font-family: Arial, sans-serif;
         }
@@ -61,33 +89,45 @@
         .container {
             margin-top: 30px;
         }
+
+        .product-image {
+            max-width: 150px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
+<header style="display: flex">
+    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+    <div class="header-icons">
+        <a href="/admin"><img src="https://kappa.lol/T_qdB" alt="admin-page"></a>
+        <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
+        <a href="/profile"><img src="https://kappa.lol/_N6sE" alt="profile"></a>
+    </div>
+</header>
 <div class="container my-2">
     <h1>Offer list</h1>
     <a th:href="@{/admin/addOffer}" class="btn btn-primary btn-sm mb-3">Add offer</a>
     <table border="1" class = "table table-responsive-md">
         <thead class="thead-dark">
         <tr>
+            <th>Image</th>
             <th>Name</th>
             <th>Brand</th>
             <th>Category</th>
             <th>Price</th>
-            <th>Sizes</th>
             <th>Quantity</th>
-            <th>Image URL</th>
+            <th>Action</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="offer : ${offers}">
+            <td><img class="product-image" th:src="${offer.imageUrl}" alt="Offer Image"></td>
             <td th:text="${offer.name}"></td>
             <td th:text="${offer.brand}"></td>
             <td th:text="${offer.category}"></td>
             <td th:text="${offer.price}"></td>
-            <td th:text="${offer.availableSizes}"></td>
             <td th:text="${offer.quantity}"></td>
-            <td th:text="${offer.imageUrl}"></td>
             <td>
                 <a th:href="@{/admin/updateOffer/{id}(id=${offer.id})}" class="btn btn-primary">Update</a>
                 <a th:href="@{/admin/deleteOffer/{id}(id=${offer.id})}" class="btn btn-danger">Delete</a>
@@ -96,23 +136,22 @@
         </tbody>
     </table>
 
-    <div th:if = "${totalPages > 1}">
-        <div class = "row col-sm-10">
-            <div class = "col-sm-2">
+    <div th:if="${totalPages > 1}">
+        <div class="row col-sm-10 mx-auto text-center">
+            <div class="col-sm-4">
                 All: [[${totalItems}]]
             </div>
-            <div class = "col-sm-1">
-                <span th:each="i: ${#numbers.sequence(1, totalPages)}">
-                    <a th:if="${currentPage != i}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
-                    <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
-                </span>
+            <div class="col-sm-4">
+            <span th:each="i: ${#numbers.sequence(1, totalPages)}">
+                <a th:if="${currentPage != i}" th:href="@{'/offers/page/' + ${i}}">[[${i}]]</a>
+                <span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp; &nbsp;
+            </span>
             </div>
-            <div class = "col-sm-1">
-                <a th:if="${currentPage < totalPages}" th:href="@{'/page/' + ${currentPage + 1}}">&gt;</a>
+            <div class="col-sm-4">
+                <a th:if="${currentPage < totalPages}" th:href="@{'/offers/page/' + ${currentPage + 1}}">&gt;</a>
                 <span th:unless="${currentPage < totalPages}">&gt;</span>
             </div>
         </div>
-
     </div>
 </div>
 </body>

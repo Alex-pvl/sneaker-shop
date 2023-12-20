@@ -12,7 +12,7 @@ import ru.nstu.ap.model.order.Order;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "order_items")
+@Table(schema = "shop", name = "order_items")
 public class OrderItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

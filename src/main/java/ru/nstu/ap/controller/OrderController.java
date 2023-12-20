@@ -27,7 +27,8 @@ public class OrderController {
 			return "redirect:/login";
 		}
 		var user = userService.getByUsername(username);
-		var orders = orderService.getOrders(user.getId(), OrderDTO::new);
+		var orders = orderService.getOrders(user.getId(), OrderDTO::new).stream()
+			.filter(o -> o.getCost()>0.0).toList();
 		model.addAttribute("orders", orders);
 		return "orders";
 	}
@@ -40,12 +41,13 @@ public class OrderController {
 		}
 		var user = userService.getByUsername(username);
 		orderService.create(user.getId());
-		model.addAttribute("orders", orderService.getOrders(user.getId(), OrderDTO::new));
+		model.addAttribute("orders", orderService.getOrders(user.getId(), OrderDTO::new).stream()
+			.filter(o -> o.getCost()>0.0).toList());
 		return "orders";
 	}
 
 	@GetMapping("/orders/{id}")
-	public String orderDetailsPage(@PathVariable Integer id, Model model) throws IllegalAccessException {
+	public String orderDetailsPage(@PathVariable Integer id, Model model) {
 		String username = SecurityUtil.getSessionUser();
 		if (username == null) {
 			return "redirect:/login";
@@ -69,8 +71,9 @@ public class OrderController {
 			return "redirect:/login";
 		}
 		var user = userService.getByUsername(username);
-		orderService.deleteItem(orderId, orderItemId);
-		model.addAttribute("orders", orderService.getOrders(user.getId(), OrderDTO::new));
+		orderService.deleteItem(user.getId(), orderId, orderItemId);
+		model.addAttribute("orders", orderService.getOrders(user.getId(), OrderDTO::new).stream()
+			.filter(o -> o.getCost()>0.0).toList());
 		return "orders";
 	}
 
@@ -98,7 +101,8 @@ public class OrderController {
 		}
 		var user = userService.getByUsername(username);
 		orderService.cancel(id);
-		var orders = orderService.getOrders(user.getId(), OrderDTO::new);
+		var orders = orderService.getOrders(user.getId(), OrderDTO::new).stream()
+			.filter(o -> o.getCost()>0.0).toList();
 		model.addAttribute("orders", orders);
 		return "orders";
 	}
@@ -111,7 +115,8 @@ public class OrderController {
 		}
 		var user = userService.getByUsername(username);
 		orderService.delete(id);
-		var orders = orderService.getOrders(user.getId(), OrderDTO::new);
+		var orders = orderService.getOrders(user.getId(), OrderDTO::new).stream()
+			.filter(o -> o.getCost()>0.0).toList();
 		model.addAttribute("orders", orders);
 		return "orders";
 	}

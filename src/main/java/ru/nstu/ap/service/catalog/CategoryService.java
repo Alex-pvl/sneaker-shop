@@ -1,6 +1,9 @@
 package ru.nstu.ap.service.catalog;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nstu.ap.model.catalog.Category;
@@ -25,15 +28,17 @@ public class CategoryService {
 
 	@Transactional(readOnly = true)
 	public Category getById(Integer id) {
-		return categoryRepository.findById(id)
-			.orElseThrow(IllegalArgumentException::new);
+		return categoryRepository.findCategoryById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Category getByName(String name) {
+		return categoryRepository.findCategoryByName(name);
 	}
 
 	@Transactional
-	public Category create(String name) {
-		var category = new Category();
-		category.setName(name);
-		return categoryRepository.save(category);
+	public void create(Category category) {
+		categoryRepository.save(category);
 	}
 
 	@Transactional
@@ -46,5 +51,11 @@ public class CategoryService {
 	@Transactional
 	public void deleteById(Integer id) {
 		categoryRepository.deleteById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<Category> findPaginated(int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+		return categoryRepository.findAll(pageable);
 	}
 }

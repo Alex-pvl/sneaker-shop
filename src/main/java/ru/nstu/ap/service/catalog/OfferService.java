@@ -6,9 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.nstu.ap.dto.catalog.OfferDTO;
 import ru.nstu.ap.model.catalog.Offer;
-import ru.nstu.ap.model.catalog.OfferFilterParams;
 import ru.nstu.ap.model.catalog.OfferSize;
 import ru.nstu.ap.repository.catalog.OfferRepository;
 import ru.nstu.ap.repository.catalog.OfferSizeRepository;
@@ -54,23 +52,14 @@ public class OfferService {
 			.toList();
 	}
 
-	public Offer create(String name, Integer brandId, Integer categoryId, Double price, Integer quantity, String imageUrl) {
-		var offer = new Offer();
-		offer.setName(name);
-		offer.setBrand(brandService.getById(brandId));
-		offer.setCategory(categoryService.getById(categoryId));
-		offer.setPrice(price);
+	public void create(Offer offer) {
 		offer.setSizes(Stream.of(39, 40, 41, 42, 43, 44, 45, 46).map(s -> {
 			var os = new OfferSize();
 			os.setSize(s);
 			offerSizeRepository.save(os);
 			return os;
 		}).toList());
-		offer.setQuantity(quantity);
-		offer.setImageUrl(imageUrl);
-		offer.setAvailable(offer.getQuantity() > 0);
 		offerRepository.save(offer);
-		return offer;
 	}
 
 	@Transactional(readOnly = true)
@@ -86,5 +75,10 @@ public class OfferService {
 	public Page<Offer> findPaginated(int pageNo, int pageSize) {
 		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
 		return offerRepository.findAll(pageable);
+	}
+
+	@Transactional
+	public void deleteById(Integer id) {
+		offerRepository.deleteById(id);
 	}
 }

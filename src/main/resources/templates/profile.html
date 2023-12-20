@@ -42,8 +42,8 @@
     <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
     <div class="header-icons">
         <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
-        <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
-        <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
+        <a th:if="${not isAdmin}" href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
+        <a th:if="${not isAdmin}" href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
         <a href="/logout"><img src="https://kappa.lol/rAEhV" alt="logout"></a>
     </div>
 </header>

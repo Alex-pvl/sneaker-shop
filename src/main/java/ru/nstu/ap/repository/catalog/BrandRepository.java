@@ -6,4 +6,6 @@ import ru.nstu.ap.model.catalog.Brand;
 
 @Repository
 public interface BrandRepository extends JpaRepository<Brand, Integer> {
+	Brand findBrandById(Integer id);
+	Brand findBrandByName(String name);
 }

@@ -6,4 +6,6 @@ import ru.nstu.ap.model.catalog.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
+	Category findCategoryById(Integer id);
+	Category findCategoryByName(String name);
 }

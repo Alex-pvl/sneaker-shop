@@ -11,7 +11,7 @@ import ru.nstu.ap.model.catalog.Offer;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "cart_items")
+@Table(schema = "shop", name = "cart_items")
 public class CartItem {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

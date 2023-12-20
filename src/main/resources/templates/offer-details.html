@@ -135,8 +135,7 @@
 
         .alert {
             text-align: center;
-            width: 200px;
-            max-width: 200px;
+            width: auto;
             display: inline-block;
             margin-top: 10px;
         }
@@ -147,9 +146,10 @@
 <header style="display: flex">
     <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
     <div class="header-icons">
+        <a th:if="${isAdmin}" href="/admin"><img src="https://kappa.lol/T_qdB" alt="admin-page"></a>
         <a href="/"><img src="https://kappa.lol/YYf2z" alt="catalog"></a>
-        <a href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
-        <a href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
+        <a th:if="${not isAdmin}" href="/cart"><img src="https://kappa.lol/RnrbT" alt="cart"></a>
+        <a th:if="${not isAdmin}" href="/orders"><img src="https://kappa.lol/F3oea" alt="orders"></a>
         <a href="/login"><img src="https://kappa.lol/_N6sE" alt="profile"></a>
     </div>
 </header>
@@ -166,7 +166,7 @@
         <p>Quantity: <span th:text="${offer.quantity}"></span></p>
 
         <!-- Радиокнопки выбора размера -->
-        <div th:if="${offer.isAvailable}" class="size-selection">
+        <div th:if="${offer.isAvailable and not isAdmin}" class="size-selection">
             <h3>Select Size:</h3>
             <form th:action="@{/addToCart}" method="post">
                 <th:block th:each="size : ${offer.availableSizes}">
@@ -181,14 +181,14 @@
             Size not selected!
         </div>
         <!-- Кнопка добавления в корзину -->
-        <form th:if="${offer.isAvailable}" th:action="@{/addToCart}" method="post">
+        <form th:if="${offer.isAvailable and not isAdmin}" th:action="@{/addToCart}" method="post">
             <input type="hidden" name="offerId" th:value="${offer.id}" />
             <input type="hidden" name="selectedSize" /> <!-- Значение выбранного размера будет добавлено через JavaScript -->
             <button type="submit">Add to Cart</button>
         </form>
 
         <div th:if="${!offer.isAvailable}" class="alert alert-danger">
-            Product out of stock.
+            Product not available now.
         </div>
     </div>
 </div>

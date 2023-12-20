@@ -13,6 +13,7 @@ import ru.nstu.ap.service.user.UserService;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Service
@@ -40,17 +41,16 @@ public class OrderService {
 	}
 
 	@Transactional(readOnly = true)
-	public <T> T getOrder(Integer userId, Integer id, Function<Order, T> mapper) throws IllegalAccessException {
+	public <T> T getOrder(Integer userId, Integer id, Function<Order, T> mapper) {
 		return mapper.apply(getById(userId, id));
 	}
 
-	public Order getById(Integer userId, Integer id) throws IllegalAccessException {
-		var order = orderRepository.findById(id)
+	public Order getById(Integer userId, Integer id) {
+		return orderRepository.findAll().stream()
+			.filter(o -> Objects.equals(o.getUserId(), userId))
+			.filter(o -> o.getId().equals(id))
+			.findFirst()
 			.orElseThrow(IllegalArgumentException::new);
-		if (!order.getUserId().equals(userId)) {
-			throw new IllegalAccessException("Unable to access");
-		}
-		return order;
 	}
 
 	@Transactional
@@ -115,8 +115,8 @@ public class OrderService {
 	}
 
 	@Transactional
-	public void deleteItem(Integer orderId, Integer orderItemId) {
-		var order = orderRepository.findOrderById(orderId);
+	public void deleteItem(Integer userId, Integer orderId, Integer orderItemId) {
+		var order = getById(userId, orderId);
 		orderItemService.delete(orderItemId);
 		orderRepository.save(order);
 	}

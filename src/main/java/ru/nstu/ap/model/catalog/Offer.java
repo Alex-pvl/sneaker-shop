@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "offers")
+@Table(schema = "catalog", name = "offers")
 public class Offer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,13 +38,14 @@ public class Offer {
 	@NotNull
 	private Double price;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
+		schema = "catalog",
 		name = "offer_size",
 		joinColumns = @JoinColumn(name = "id_offer"),
 		inverseJoinColumns = @JoinColumn(name = "id_size")
 	)
-	private List<OfferSize> sizes;
+	private List<OfferSize> sizes = new ArrayList<>();
 
 	@NotNull
 	private Integer quantity;
@@ -55,7 +57,7 @@ public class Offer {
 
 	@NotNull
 	@Column(name = "is_available")
-	private boolean isAvailable;
+	private boolean available;
 
 	public void incrementQuantity(int i) {
 		quantity+=i;
@@ -63,6 +65,6 @@ public class Offer {
 
 	public void decrementQuantity(int i) {
 		quantity-=i;
-		this.isAvailable = this.quantity > 0;
+		this.available = this.quantity > 0;
 	}
 }

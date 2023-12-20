@@ -1,10 +1,103 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        header {
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background: #2d2d2d;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header-icons a {
+            display: inline-block;
+            background-color: #2d2d2d;
+            padding: 5px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .header-icons a img {
+            width: 42px;
+            height: 42px;
+            background-color: #cecece;
+            border-radius: 20%;
+            padding: 5px;
+        }
+
+        .logo {
+            width: 100px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .table th,
+        .table td {
+            padding: 5px;
+            text-align: center;
+            border: none;
+        }
+
+        .table th {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #e6e6e6;
+        }
+
+        .table tr:hover {
+            background-color: #ddd;
+        }
+
+        .btn {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+    <title>Offers</title>
 </head>
 <body>
-
+<header style="display: flex">
+    <img src="https://kappa.lol/iJ-p4" alt="Logo" class="logo">
+    <div class="header-icons">
+        <a href="/admin"><img src="https://kappa.lol/T_qdB" alt="admin-page"></a>
+        <a href="/profile"><img src="https://kappa.lol/_N6sE" alt="profile"></a>
+    </div>
+</header>
+<div class="container">
+    <h2>Update offer</h2>
+    <form th:action="@{/admin/addOffer}" th:object="${offer}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <label>Name</label>
+        <input type="text" th:field="*{name}" placeholder="Name" class="form-control mb-4 col-4">
+        <label>Brand</label>
+        <select id="brand" name="brand.id" class="form-control mb-4 col-4" th:field="*{brand.id}" required>
+            <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}"></option>
+        </select>
+        <label>Category</label>
+        <select id="category" class="form-control mb-4 col-4" name="category.id" th:field="*{category.id}" required>
+            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+        </select>
+        <label>Price</label>
+        <input type="number" th:field="*{price}" placeholder="Price" min="0" class="form-control mb-4 col-4">
+        <label>Quantity</label>
+        <input type="number" th:field="*{quantity}" placeholder="Quantity" min="0" class="form-control mb-4 col-4">
+        <label>Image URL</label>
+        <input type="text" th:field="*{imageUrl}" placeholder="Image URL" class="form-control mb-4 col-4">
+        <label for="isAvailable">Is Available:</label>
+        <div class="form-check form-check-inline">
+            <input type="checkbox" id="isAvailable" name="isAvailable" class="form-check-input" th:field="*{available}">
+        </div>
+        <br>
+        <button type="submit" class="btn btn-info col-2">Save</button>
+    </form>
+    <hr>
+    <a class="btn btn-info col-2" th:href="@{/admin/offers}">Back</a>
+</div>
 </body>
 </html>

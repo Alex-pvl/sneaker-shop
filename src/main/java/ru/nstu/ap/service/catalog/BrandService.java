@@ -1,6 +1,9 @@
 package ru.nstu.ap.service.catalog;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nstu.ap.model.catalog.Brand;
@@ -25,15 +28,17 @@ public class BrandService {
 
 	@Transactional(readOnly = true)
 	public Brand getById(Integer id) {
-		return brandRepository.findById(id)
-			.orElseThrow(IllegalArgumentException::new);
+		return brandRepository.findBrandById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Brand getByName(String name) {
+		return brandRepository.findBrandByName(name);
 	}
 
 	@Transactional
-	public Brand create(String name) {
-		var brand = new Brand();
-		brand.setName(name);
-		return brandRepository.save(brand);
+	public void create(Brand brand) {
+		brandRepository.save(brand);
 	}
 
 	@Transactional
@@ -46,5 +51,11 @@ public class BrandService {
 	@Transactional
 	public void deleteById(Integer id) {
 		brandRepository.deleteById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public Page<Brand> findPaginated(int pageNo, int pageSize) {
+		Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+		return brandRepository.findAll(pageable);
 	}
 }

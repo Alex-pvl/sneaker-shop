@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 @Entity
-@Table(name = "sizes")
+@Table(schema = "catalog", name = "sizes")
 public class OfferSize {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

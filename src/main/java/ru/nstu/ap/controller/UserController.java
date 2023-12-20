@@ -24,6 +24,8 @@ public class UserController {
 			return "redirect:/login";
 		}
 		User user = userService.getByUsername(username);
+		boolean isAdmin = username != null && username.equals("admin");
+		model.addAttribute("isAdmin", isAdmin);
 		model.addAttribute("user", new UserDTO(user));
 		return "profile";
 	}
@@ -34,8 +36,9 @@ public class UserController {
 		if (username == null) {
 			return "redirect:/login";
 		}
-
+		boolean isAdmin = username != null && username.equals("admin");
 		User user = userService.addBalanceByUsername(username, 1.0 * balance);
+		model.addAttribute("isAdmin", isAdmin);
 		model.addAttribute("user", new UserDTO(user));
 		return "profile";
 	}

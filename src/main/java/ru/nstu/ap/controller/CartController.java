@@ -93,7 +93,6 @@ public class CartController {
 		}
 		var user = userService.getByUsername(username);
 		cartService.deleteItem(user.getId(), cartItemId);
-		var cart = cartService.getCart(user.getId(), CartDTO::new);
 		model.addAttribute("cart", cartService.getCart(user.getId(), CartDTO::new));
 		return "cart";
 	}
