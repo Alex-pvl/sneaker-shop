@@ -60,23 +60,6 @@ public class OrderController {
 		return "order-details";
 	}
 
-	@PostMapping("/removeOrderItem")
-	public String removeOrderItem(
-		@RequestParam("orderId") Integer orderId,
-		@RequestParam("orderItemId") Integer orderItemId,
-		Model model
-	) {
-		String username = SecurityUtil.getSessionUser();
-		if (username == null) {
-			return "redirect:/login";
-		}
-		var user = userService.getByUsername(username);
-		orderService.deleteItem(user.getId(), orderId, orderItemId);
-		model.addAttribute("orders", orderService.getOrders(user.getId(), OrderDTO::new).stream()
-			.filter(o -> o.getCost()>0.0).toList());
-		return "orders";
-	}
-
 	@PostMapping("/payOrder")
 	public String payOrder(@RequestParam("orderId") Integer id, Model model) {
 		String username = SecurityUtil.getSessionUser();

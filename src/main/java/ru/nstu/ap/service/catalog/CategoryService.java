@@ -31,11 +31,6 @@ public class CategoryService {
 		return categoryRepository.findCategoryById(id);
 	}
 
-	@Transactional(readOnly = true)
-	public Category getByName(String name) {
-		return categoryRepository.findCategoryByName(name);
-	}
-
 	@Transactional
 	public void create(Category category) {
 		categoryRepository.save(category);

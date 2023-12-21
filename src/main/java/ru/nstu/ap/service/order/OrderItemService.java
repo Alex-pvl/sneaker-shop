@@ -12,8 +12,6 @@ import ru.nstu.ap.repository.order.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
 
 @Service
 public class OrderItemService {
@@ -25,46 +23,9 @@ public class OrderItemService {
 	private OfferRepository offerRepository;
 
 	@Transactional(readOnly = true)
-	public <T> List<T> getOrderItemsByOrderId(Integer orderId, Function<OrderItem, T> mapper) {
-		return this.getAllByOrderId(orderId).stream().map(mapper).toList();
-	}
-
-	public List<OrderItem> getAllByOrderId(Integer orderId) {
-		return orderItemRepository.findAll().stream()
-			.filter(i -> Objects.equals(i.getOrder().getId(), orderId))
-			.toList();
-	}
-
-	@Transactional(readOnly = true)
 	public OrderItem getById(Integer id) {
 		return orderItemRepository.findById(id)
 			.orElseThrow(IllegalArgumentException::new);
-	}
-
-	@Transactional
-	public void incrementQuantity(Integer id, Integer orderId) {
-		var item = getById(id);
-		var order = item.getOrder();
-		if (!Objects.equals(orderId, order.getId())) {
-			throw new IllegalArgumentException("Unknown order");
-		}
-		item.incrementQuantity();
-		orderItemRepository.save(item);
-	}
-
-	@Transactional
-	public void decrementQuantity(Integer id, Integer orderId) {
-		var item = getById(id);
-		var order = item.getOrder();
-		if (!Objects.equals(orderId, order.getId())) {
-			throw new IllegalArgumentException("Unknown order");
-		}
-		if (item.getQuantity() > 1) {
-			item.decrementQuantity();
-		} else {
-			return;
-		}
-		orderItemRepository.save(item);
 	}
 
 	@Transactional

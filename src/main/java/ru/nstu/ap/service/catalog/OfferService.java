@@ -23,10 +23,6 @@ public class OfferService {
 	private OfferRepository offerRepository;
 	@Autowired
 	private OfferSizeRepository offerSizeRepository;
-	@Autowired
-	private BrandService brandService;
-	@Autowired
-	private CategoryService categoryService;
 
 	@Transactional(readOnly = true)
 	public <T> List<T> getOffers(Function<Offer, T> mapper) {

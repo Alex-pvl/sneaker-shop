@@ -40,11 +40,6 @@ public class OrderService {
 			.toList();
 	}
 
-	@Transactional(readOnly = true)
-	public <T> T getOrder(Integer userId, Integer id, Function<Order, T> mapper) {
-		return mapper.apply(getById(userId, id));
-	}
-
 	public Order getById(Integer userId, Integer id) {
 		return orderRepository.findAll().stream()
 			.filter(o -> Objects.equals(o.getUserId(), userId))
@@ -112,13 +107,6 @@ public class OrderService {
 			offerRepository.save(offer);
 		});
 		orderRepository.deleteById(orderId);
-	}
-
-	@Transactional
-	public void deleteItem(Integer userId, Integer orderId, Integer orderItemId) {
-		var order = getById(userId, orderId);
-		orderItemService.delete(orderItemId);
-		orderRepository.save(order);
 	}
 
 	private Order createEmptyOrder(Integer userId) {

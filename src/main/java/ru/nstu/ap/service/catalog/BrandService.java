@@ -31,11 +31,6 @@ public class BrandService {
 		return brandRepository.findBrandById(id);
 	}
 
-	@Transactional(readOnly = true)
-	public Brand getByName(String name) {
-		return brandRepository.findBrandByName(name);
-	}
-
 	@Transactional
 	public void create(Brand brand) {
 		brandRepository.save(brand);

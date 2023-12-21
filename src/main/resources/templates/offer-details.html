@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Offer Details</title>
     <style>
-        /* Общие стили */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -14,18 +13,18 @@
 
         .header-icons a {
             display: inline-block;
-            background-color: #2d2d2d; /* Цвет фона */
-            padding: 5px; /* Подберите подходящий отступ */
-            border-radius: 50%; /* Для создания круглых иконок */
-            margin-right: 10px; /* Отступ между иконками (подберите по своему вкусу) */
+            background-color: #2d2d2d;
+            padding: 5px;
+            border-radius: 50%;
+            margin-right: 10px;
         }
 
         .header-icons a img {
-            width: 42px; /* Установите желаемую ширину и высоту для иконок */
+            width: 42px;
             height: 42px;
-            background-color: #cecece; /* Цвет иконок */
-            border-radius: 20%; /* Для создания круглых иконок */
-            padding: 5px; /* Подберите подходящий отступ */
+            background-color: #cecece;
+            border-radius: 20%;
+            padding: 5px;
         }
 
         header {
@@ -37,7 +36,7 @@
         }
 
         .logo {
-            width: 100px; /* Adjust size as needed */
+            width: 100px;
         }
 
         h1 {
@@ -45,7 +44,6 @@
             margin-bottom: 20px;
         }
 
-        /* Стили для блока с информацией о продукте */
         .product-details {
             display: flex;
             flex-wrap: wrap;
@@ -84,7 +82,6 @@
             margin: 10px 0;
         }
 
-        /* Стили для выбора размера */
         .size-selection {
             margin-top: 20px;
         }
@@ -111,7 +108,6 @@
             background-color: #0056b3;
         }
 
-        /* Стили для кнопки добавления в корзину */
         form button {
             padding: 10px 20px;
             background-color: #007bff;
@@ -165,7 +161,6 @@
         <p>Price: $<span th:text="${offer.price}"></span></p>
         <p>Quantity: <span th:text="${offer.quantity}"></span></p>
 
-        <!-- Радиокнопки выбора размера -->
         <div th:if="${offer.isAvailable and not isAdmin}" class="size-selection">
             <h3>Select Size:</h3>
             <form th:action="@{/addToCart}" method="post">
@@ -180,10 +175,10 @@
         <div th:if="${param.fail}" class="alert alert-danger">
             Size not selected!
         </div>
-        <!-- Кнопка добавления в корзину -->
+
         <form th:if="${offer.isAvailable and not isAdmin}" th:action="@{/addToCart}" method="post">
             <input type="hidden" name="offerId" th:value="${offer.id}" />
-            <input type="hidden" name="selectedSize" /> <!-- Значение выбранного размера будет добавлено через JavaScript -->
+            <input type="hidden" name="selectedSize" />
             <button type="submit">Add to Cart</button>
         </form>
 
@@ -193,7 +188,6 @@
     </div>
 </div>
 
-<!-- JavaScript для обновления выбранного размера -->
 <script>
     document.querySelectorAll('input[type=radio][name=selectedSize]').forEach(function(radio) {
         radio.addEventListener('change', function() {

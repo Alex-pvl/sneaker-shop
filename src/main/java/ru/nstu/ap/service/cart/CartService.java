@@ -66,13 +66,12 @@ public class CartService {
 	}
 
 	@Transactional
-	public Cart createEmptyCart(Integer userId) {
+	public void createEmptyCart(Integer userId) {
 		var cart = new Cart();
 		cart.setCartItems(Collections.emptyList());
 		cart.setUserId(userId);
 		cart.setEmpty(true);
 		cart.setCost(0.0);
 		cartRepository.save(cart);
-		return cart;
 	}
 }

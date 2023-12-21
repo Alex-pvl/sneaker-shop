@@ -91,7 +91,6 @@
                 <th>Cost</th>
                 <th>Quantity</th>
                 <th>Size</th>
-                <th>Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -107,13 +106,6 @@
                     </div>
                 </td>
                 <td th:text="${item.size}">Size</td>
-                <td th:if="${!isPaid}">
-                    <form th:action="@{/removeOrderItem}" method="post">
-                        <input type="hidden" name="orderId" th:value="${order.id}">
-                        <input type="hidden" name="orderItemId" th:value="${item.id}">
-                        <button class="btn btn-danger" type="submit" th:attr="disabled=${order.status.id == 4}">Remove</button>
-                    </form>
-                </td>
             </tr>
             </tbody>
         </table>

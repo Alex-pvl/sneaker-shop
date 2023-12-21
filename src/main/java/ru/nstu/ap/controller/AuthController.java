@@ -35,12 +35,17 @@ public class AuthController {
 		@Valid @ModelAttribute("user")RegistrationDTO user,
 		BindingResult result, Model model
 	) {
+		var isNotValid = user == null || user.getUsername().isEmpty() || user.getEmail().isEmpty() || user.getName().isEmpty()
+			|| user.getPassword().isEmpty() || user.getPassword().isBlank() || user.getName().isBlank() || user.getUsername().isBlank();
+		if (isNotValid) {
+			return "redirect:/register?fail";
+		}
 		User existingUserEmail = userService.getByEmail(user.getEmail());
-		if (existingUserEmail != null && existingUserEmail.getEmail() != null && existingUserEmail.getEmail().isEmpty()) {
+		if (existingUserEmail != null && existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty()) {
 			return "redirect:/register?fail";
 		}
 		User existingUserLogin = userService.getByUsername(user.getUsername());
-		if (existingUserLogin != null && existingUserLogin.getUsername() != null && existingUserLogin.getUsername().isEmpty()) {
+		if (existingUserLogin != null && existingUserLogin.getUsername() != null && !existingUserLogin.getUsername().isEmpty()) {
 			return "redirect:/register?fail";
 		}
 		if (result.hasErrors()) {

@@ -5,13 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nstu.ap.model.cart.Cart;
 import ru.nstu.ap.model.cart.CartItem;
-import ru.nstu.ap.model.catalog.Offer;
 import ru.nstu.ap.repository.cart.CartItemRepository;
 import ru.nstu.ap.service.catalog.OfferService;
 
-import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
 @Service
 public class CartItemService {
@@ -19,17 +16,6 @@ public class CartItemService {
 	private CartItemRepository cartItemRepository;
 	@Autowired
 	private OfferService offerService;
-
-	@Transactional(readOnly = true)
-	public <T> List<T> getCartItemsByCartId(Integer cartId, Function<CartItem, T> mapper) {
-		return this.getAll(cartId).stream().map(mapper).toList();
-	}
-
-	public List<CartItem> getAll(Integer cartId) {
-		return cartItemRepository.findAll().stream()
-			.filter(i -> i.getCart().getId().equals(cartId))
-			.toList();
-	}
 
 	@Transactional(readOnly = true)
 	public CartItem getById(Integer id) {
