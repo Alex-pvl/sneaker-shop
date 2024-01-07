@@ -1,6 +1,6 @@
 package ru.nstu.ap.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +16,8 @@ import ru.nstu.ap.utils.SecurityUtil;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class CategoryController {
-	@Autowired
 	private CategoryService categoryService;
 
 	@GetMapping("/categories")
@@ -30,35 +30,33 @@ public class CategoryController {
 		return new CategoryDTO(categoryService.getById(id));
 	}
 
+	/** -------------- Admin pages -------------- */
+
 	@GetMapping("/admin/categories")
 	public String adminCategories(Model model) {
-		String username = SecurityUtil.getSessionUser();
-		if (username == null || !username.equals("admin")) return "redirect:/";
+		if (!SecurityUtil.isAdmin()) return "redirect:/";
 		adminViewCategories(1, model);
-		return "admin-categories-index";
+		return "admin/categories";
 	}
 
 	@GetMapping("/categories/page/{pageNo}")
 	public String adminViewCategories(@PathVariable int pageNo, Model model) {
-		String username = SecurityUtil.getSessionUser();
-		if (username == null || !username.equals("admin")) {
-			return "redirect:/";
-		}
-		int pageSize = 5;
-		Page<CategoryDTO> page = categoryService.findPaginated(pageNo, pageSize).map(CategoryDTO::new);
+		if (!SecurityUtil.isAdmin()) return "redirect:/";
+		Page<CategoryDTO> page = categoryService.findPaginated(pageNo, 5).map(CategoryDTO::new);
 		List<CategoryDTO> list = page.getContent();
+
 		model.addAttribute("currentPage", pageNo);
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("totalItems", page.getTotalElements());
 		model.addAttribute("categories", list);
-		return "admin-categories-index";
+		return "admin/categories";
 	}
 
 	@GetMapping("/admin/addCategory")
 	public String addCategoryView(Model model) {
-		Category category = new Category();
+		var category = new Category();
 		model.addAttribute("category", category);
-		return "admin-categories-new";
+		return "admin/categories_new";
 	}
 
 	@PostMapping("/admin/addCategory")
@@ -69,9 +67,9 @@ public class CategoryController {
 
 	@GetMapping("/admin/updateCategory/{id}")
 	public String updateCategoryView(@PathVariable int id, Model model) {
-		Category category = categoryService.getById(id);
+		var category = categoryService.getById(id);
 		model.addAttribute("category", category);
-		return "admin-categories-update";
+		return "admin/categories_update";
 	}
 
 	@GetMapping("/admin/deleteCategory/{id}")

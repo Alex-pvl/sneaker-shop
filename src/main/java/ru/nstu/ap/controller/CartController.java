@@ -1,6 +1,6 @@
 package ru.nstu.ap.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,10 +12,9 @@ import ru.nstu.ap.service.user.UserService;
 import ru.nstu.ap.utils.SecurityUtil;
 
 @Controller
+@AllArgsConstructor
 public class CartController {
-	@Autowired
 	private CartService cartService;
-	@Autowired
 	private UserService userService;
 
 	@GetMapping("/cart")
@@ -40,14 +39,17 @@ public class CartController {
 		try {
 			sizeValue = Integer.parseInt(size);
 		} catch (Exception e) {
-			return "redirect:/offers/" + offerId + "?fail";
+			return "redirect:/offers/%s?fail".formatted(offerId);
 		}
+
 		String username = SecurityUtil.getSessionUser();
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
 		cartService.addOffer(user.getId(), offerId, sizeValue);
+
 		model.addAttribute("cart", cartService.getByUserId(user.getId()));
 		return "cart";
 	}
@@ -61,9 +63,12 @@ public class CartController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
 		cartService.updateItem(user.getId(), cartItemId, true);
-		model.addAttribute("cart", cartService.getCart(user.getId(), CartDTO::new));
+		var cart = cartService.getCart(user.getId(), CartDTO::new);
+
+		model.addAttribute("cart", cart);
 		return "cart";
 	}
 
@@ -76,9 +81,12 @@ public class CartController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
 		cartService.updateItem(user.getId(), cartItemId, false);
-		model.addAttribute("cart", cartService.getCart(user.getId(), CartDTO::new));
+		var cart = cartService.getCart(user.getId(), CartDTO::new);
+
+		model.addAttribute("cart", cart);
 		return "cart";
 	}
 
@@ -91,9 +99,12 @@ public class CartController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
 		cartService.deleteItem(user.getId(), cartItemId);
-		model.addAttribute("cart", cartService.getCart(user.getId(), CartDTO::new));
+		var cart = cartService.getCart(user.getId(), CartDTO::new);
+
+		model.addAttribute("cart", cart);
 		return "cart";
 	}
 
@@ -103,10 +114,13 @@ public class CartController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
 		cartService.clear(user.getId());
 		cartService.createEmptyCart(user.getId());
-		model.addAttribute("cart", cartService.getCart(user.getId(), CartDTO::new));
+		var cart = cartService.getCart(user.getId(), CartDTO::new);
+
+		model.addAttribute("cart", cart);
 		return "cart";
 	}
 }

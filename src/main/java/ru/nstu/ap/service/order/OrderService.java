@@ -1,6 +1,6 @@
 package ru.nstu.ap.service.order;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nstu.ap.model.order.Order;
@@ -17,21 +17,17 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @Service
+@AllArgsConstructor
 public class OrderService {
-	@Autowired
 	private OrderRepository orderRepository;
-	@Autowired
 	private OfferRepository offerRepository;
-	@Autowired
 	private OrderItemService orderItemService;
-	@Autowired
 	private CartService cartService;
-	@Autowired
 	private UserService userService;
 
 	@Transactional(readOnly = true)
 	public <T> List<T> getOrders(Integer userId, Function<Order, T> mapper) {
-		return getAll(userId).stream().map(mapper).toList();
+		return getAll(userId).stream().filter(o -> o.getCost()>0.0).map(mapper).toList();
 	}
 
 	public List<Order> getAll(Integer userId) {
@@ -49,10 +45,11 @@ public class OrderService {
 	}
 
 	@Transactional
-	public Order create(Integer userId) {
+	public void create(Integer userId) {
 		var order = createEmptyOrder(userId);
 		var cart = cartService.getByUserId(userId);
 		var items = orderItemService.mapFromCart(order.getId(), cart);
+
 		order.setOrderItems(items);
 		order.setCost(items.stream()
 			.map(i -> i.getOffer().getPrice() * i.getQuantity())
@@ -64,9 +61,9 @@ public class OrderService {
 			var offer = i.getOffer();
 			offer.decrementQuantity(i.getQuantity());
 		});
+
 		cartService.clear(userId);
 		cartService.createEmptyCart(userId);
-		return order;
 	}
 
 	@Transactional
@@ -75,12 +72,15 @@ public class OrderService {
 			.orElseThrow(IllegalArgumentException::new);
 		var user = userService.getById(order.getUserId());
 		var userBalance = user.getBalance();
+
 		if (userBalance >= order.getCost()) {
 			order.setPaid(true);
 			order.setStatus(OrderStatus.DONE);
 			user.setBalance(userBalance - order.getCost());
 			orderRepository.save(order);
-		} else throw new IllegalAccessException("Not enough money");
+		} else {
+			throw new IllegalAccessException("Not enough money");
+		}
 	}
 
 	@Transactional

@@ -1,6 +1,6 @@
 package ru.nstu.ap.service.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import ru.nstu.ap.repository.user.UserRepository;
 
 @Service
+@AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-	@Autowired
 	private UserRepository userRepository;
 
 	@Override

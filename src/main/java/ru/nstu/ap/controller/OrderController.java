@@ -1,7 +1,6 @@
 package ru.nstu.ap.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +13,9 @@ import ru.nstu.ap.service.user.UserService;
 import ru.nstu.ap.utils.SecurityUtil;
 
 @Controller
+@AllArgsConstructor
 public class OrderController {
-	@Autowired
 	private OrderService orderService;
-	@Autowired
 	private UserService userService;
 
 	@GetMapping("/orders")
@@ -26,9 +24,10 @@ public class OrderController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
-		var orders = orderService.getOrders(user.getId(), OrderDTO::new).stream()
-			.filter(o -> o.getCost()>0.0).toList();
+		var orders = orderService.getOrders(user.getId(), OrderDTO::new);
+
 		model.addAttribute("orders", orders);
 		return "orders";
 	}
@@ -39,10 +38,12 @@ public class OrderController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
+		var orders = orderService.getOrders(user.getId(), OrderDTO::new);
+
 		orderService.create(user.getId());
-		model.addAttribute("orders", orderService.getOrders(user.getId(), OrderDTO::new).stream()
-			.filter(o -> o.getCost()>0.0).toList());
+		model.addAttribute("orders", orders);
 		return "orders";
 	}
 
@@ -52,12 +53,14 @@ public class OrderController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
 		var order = orderService.getById(user.getId(), id);
 		boolean isPaid = order.isPaid();
+
 		model.addAttribute("order", order);
 		model.addAttribute("isPaid", isPaid);
-		return "order-details";
+		return "order_details";
 	}
 
 	@PostMapping("/payOrder")
@@ -66,13 +69,17 @@ public class OrderController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
+		var orders = orderService.getOrders(user.getId(), OrderDTO::new);
+
 		try {
 			orderService.pay(id);
 		} catch (IllegalAccessException e) {
-			return "redirect:/orders/" + id + "?fail";
+			return "redirect:/orders/%s?fail".formatted(id);
 		}
-		model.addAttribute("orders", orderService.getOrders(user.getId(), OrderDTO::new));
+
+		model.addAttribute("orders", orders);
 		return "orders";
 	}
 
@@ -82,10 +89,11 @@ public class OrderController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
+		var orders = orderService.getOrders(user.getId(), OrderDTO::new);
 		orderService.cancel(id);
-		var orders = orderService.getOrders(user.getId(), OrderDTO::new).stream()
-			.filter(o -> o.getCost()>0.0).toList();
+
 		model.addAttribute("orders", orders);
 		return "orders";
 	}
@@ -96,10 +104,11 @@ public class OrderController {
 		if (username == null) {
 			return "redirect:/login";
 		}
+
 		var user = userService.getByUsername(username);
+		var orders = orderService.getOrders(user.getId(), OrderDTO::new);
 		orderService.delete(id);
-		var orders = orderService.getOrders(user.getId(), OrderDTO::new).stream()
-			.filter(o -> o.getCost()>0.0).toList();
+
 		model.addAttribute("orders", orders);
 		return "orders";
 	}

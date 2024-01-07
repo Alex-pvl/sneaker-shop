@@ -1,6 +1,6 @@
 package ru.nstu.ap.service.cart;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nstu.ap.model.cart.Cart;
@@ -11,10 +11,9 @@ import ru.nstu.ap.service.catalog.OfferService;
 import java.util.Objects;
 
 @Service
+@AllArgsConstructor
 public class CartItemService {
-	@Autowired
 	private CartItemRepository cartItemRepository;
-	@Autowired
 	private OfferService offerService;
 
 	@Transactional(readOnly = true)

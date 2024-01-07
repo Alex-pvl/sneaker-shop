@@ -1,6 +1,6 @@
 package ru.nstu.ap.service.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,14 +13,11 @@ import ru.nstu.ap.service.cart.CartService;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class UserService {
-	@Autowired
 	private UserRepository userRepository;
-	@Autowired
 	private RoleRepository roleRepository;
-	@Autowired
 	private PasswordEncoder passwordEncoder;
-	@Autowired
 	private CartService cartService;
 
 	@Transactional(readOnly = true)
@@ -46,15 +43,44 @@ public class UserService {
 	}
 
 	@Transactional
-	public void saveUser(RegistrationDTO registration) {
+	public void register(RegistrationDTO user) throws IllegalArgumentException {
+		var isNotValid = user == null || user.getUsername().isEmpty() ||
+				user.getEmail().isEmpty() || user.getName().isEmpty() ||
+				user.getPassword().isEmpty() || user.getPassword().isBlank() ||
+				user.getName().isBlank() || user.getUsername().isBlank();
+
+		if (isNotValid) {
+			throw new IllegalArgumentException("Validation error");
+		}
+
+		User existingUserEmail = getByEmail(user.getEmail());
+		var alreadyExistsEmail = existingUserEmail != null &&
+				existingUserEmail.getEmail() != null && !existingUserEmail.getEmail().isEmpty();
+		if (alreadyExistsEmail) {
+			throw new IllegalArgumentException("User with this email already exists");
+		}
+
+		User existingUserLogin = getByUsername(user.getUsername());
+		var alreadyExistsLogin = existingUserLogin != null &&
+				existingUserLogin.getUsername() != null && !existingUserLogin.getUsername().isEmpty();
+		if (alreadyExistsLogin) {
+			throw new IllegalArgumentException("User with this username already exists");
+		}
+
+		saveUser(user);
+	}
+
+	private void saveUser(RegistrationDTO registration) {
 		var user = new User();
+		var role = roleRepository.findRoleByName("USER");
+
 		user.setName(registration.getName());
 		user.setUsername(registration.getUsername());
 		user.setEmail(registration.getEmail());
 		user.setPassword(passwordEncoder.encode(registration.getPassword()));
-		var role = roleRepository.findRoleByName("USER");
 		user.setRoles(List.of(role));
 		user.setBalance(0.0);
+
 		userRepository.save(user);
 		cartService.createEmptyCart(user.getId());
 	}

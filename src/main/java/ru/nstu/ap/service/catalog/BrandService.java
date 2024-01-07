@@ -1,6 +1,6 @@
 package ru.nstu.ap.service.catalog;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.function.Function;
 
 @Service
+@AllArgsConstructor
 public class BrandService {
-	@Autowired
 	private BrandRepository brandRepository;
 
 	@Transactional(readOnly = true)
@@ -34,13 +34,6 @@ public class BrandService {
 	@Transactional
 	public void create(Brand brand) {
 		brandRepository.save(brand);
-	}
-
-	@Transactional
-	public Brand update(Integer id, String name) {
-		var brand = getById(id);
-		brand.setName(name);
-		return brandRepository.save(brand);
 	}
 
 	@Transactional

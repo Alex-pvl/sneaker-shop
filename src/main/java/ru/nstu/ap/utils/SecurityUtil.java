@@ -12,4 +12,8 @@ public class SecurityUtil {
 		}
 		return null;
 	}
+
+	public static boolean isAdmin() {
+		return getSessionUser() != null && getSessionUser().equals("admin");
+	}
 }

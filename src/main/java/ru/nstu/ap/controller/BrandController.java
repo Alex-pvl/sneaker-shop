@@ -1,6 +1,6 @@
 package ru.nstu.ap.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +16,8 @@ import ru.nstu.ap.utils.SecurityUtil;
 import java.util.List;
 
 @Controller
+@AllArgsConstructor
 public class BrandController {
-	@Autowired
 	private BrandService brandService;
 
 	@GetMapping("/brands")
@@ -30,35 +30,33 @@ public class BrandController {
 		return new BrandDTO(brandService.getById(id));
 	}
 
+	/** -------------- Admin pages -------------- */
+
 	@GetMapping("/admin/brands")
 	public String adminBrands(Model model) {
-		String username = SecurityUtil.getSessionUser();
-		if (username == null || !username.equals("admin")) return "redirect:/";
+		if (!SecurityUtil.isAdmin()) return "redirect:/";
 		adminViewBrands(1, model);
-		return "admin-brands-index";
+		return "admin/brands";
 	}
 
 	@GetMapping("/brands/page/{pageNo}")
 	public String adminViewBrands(@PathVariable int pageNo, Model model) {
-		String username = SecurityUtil.getSessionUser();
-		if (username == null || !username.equals("admin")) {
-			return "redirect:/";
-		}
-		int pageSize = 5;
-		Page<BrandDTO> page = brandService.findPaginated(pageNo, pageSize).map(BrandDTO::new);
+		if (!SecurityUtil.isAdmin()) return "redirect:/";
+		Page<BrandDTO> page = brandService.findPaginated(pageNo, 5).map(BrandDTO::new);
 		List<BrandDTO> list = page.getContent();
+
 		model.addAttribute("currentPage", pageNo);
 		model.addAttribute("totalPages", page.getTotalPages());
 		model.addAttribute("totalItems", page.getTotalElements());
 		model.addAttribute("brands", list);
-		return "admin-brands-index";
+		return "admin/brands";
 	}
 
 	@GetMapping("/admin/addBrand")
 	public String addBrandView(Model model) {
-		Brand brand = new Brand();
+		var brand = new Brand();
 		model.addAttribute("brand", brand);
-		return "admin-brands-new";
+		return "admin/brands_new";
 	}
 
 	@PostMapping("/admin/addBrand")
@@ -69,9 +67,9 @@ public class BrandController {
 
 	@GetMapping("/admin/updateBrand/{id}")
 	public String updateBrandView(@PathVariable int id, Model model) {
-		Brand brand = brandService.getById(id);
+		var brand = brandService.getById(id);
 		model.addAttribute("brand", brand);
-		return "admin-brands-update";
+		return "admin/brands_update";
 	}
 
 	@GetMapping("/admin/deleteBrand/{id}")

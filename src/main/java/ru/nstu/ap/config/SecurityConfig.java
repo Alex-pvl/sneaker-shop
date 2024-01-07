@@ -1,6 +1,6 @@
 package ru.nstu.ap.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -15,8 +15,8 @@ import ru.nstu.ap.service.user.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig {
-	@Autowired
 	private CustomUserDetailsService userDetailsService;
 
 	@Bean
@@ -24,7 +24,10 @@ public class SecurityConfig {
 		http
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests(req -> req
-				.requestMatchers("/login", "/register", "/register/**", "/catalog**", "/search", "/", "/offers/**", "/css/**", "/js/**")
+				.requestMatchers(
+					"/login", "/register", "/register/**",
+					"/catalog**", "/search", "/", "/offers/**"
+				)
 				.permitAll()
 				.anyRequest()
 				.authenticated())

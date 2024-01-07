@@ -8,21 +8,6 @@ spring:
     username: eshop
     password: eshop
     driver-class-name: org.postgresql.Driver
-  jmx:
-    enabled: true
   jpa:
     hibernate:
       ddl-auto: update
-  security:
-    user:
-      name: user
-      password: test
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,metrics
-  metrics:
-    distribution:
-      percentiles-histogram:
-        "[http.server.requests]": true

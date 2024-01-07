@@ -1,6 +1,6 @@
 package ru.nstu.ap.service.catalog;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,16 +13,23 @@ import ru.nstu.ap.repository.catalog.OfferSizeRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 @Service
+@AllArgsConstructor
 public class OfferService {
-	@Autowired
 	private OfferRepository offerRepository;
-	@Autowired
 	private OfferSizeRepository offerSizeRepository;
+
+	@Transactional(readOnly = true)
+	public <T> List<T> getOffers(Predicate<Offer> predicate, Function<Offer, T> mapper) {
+		return this.getAll().stream()
+				.filter(predicate)
+				.map(mapper)
+				.toList();
+	}
 
 	@Transactional(readOnly = true)
 	public <T> List<T> getOffers(Function<Offer, T> mapper) {
@@ -39,15 +46,6 @@ public class OfferService {
 			.orElseThrow(NoSuchElementException::new);
 	}
 
-	@Transactional(readOnly = true)
-	public List<Offer> searchByName(String searchText) {
-		return getAll().stream()
-			.filter(o ->
-				o.getName().toLowerCase().contains(searchText.toLowerCase())
-			)
-			.toList();
-	}
-
 	public void create(Offer offer) {
 		offer.setSizes(Stream.of(39, 40, 41, 42, 43, 44, 45, 46).map(s -> {
 			var os = new OfferSize();
@@ -56,15 +54,6 @@ public class OfferService {
 			return os;
 		}).toList());
 		offerRepository.save(offer);
-	}
-
-	@Transactional(readOnly = true)
-	public List<Offer> getAllByCategory(Integer categoryId) {
-		return getAll().stream()
-			.filter(o ->
-				Objects.requireNonNull(o.getCategory()).getId().equals(categoryId)
-			)
-			.toList();
 	}
 
 	@Transactional(readOnly = true)
