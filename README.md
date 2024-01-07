@@ -1,18 +1,20 @@
-TODO
-1. Cart:
-    - ~~"+/-" кнопки~~
-    - ~~Remove кнопка~~
-    - ~~Ссылка в название~~
-    - ~~обновление цены~~
-    - ~~Кнопка очистки корзины~~
-2. Orders:
-   - ~~копипаст табличного вида из корзины(без фоток)~~
-   - ~~ссылка на заказ как в каталоге~~
-   - удаление заказа
-3. Order:
-   - копипаст корзины, без возможности удалить товар, изменить колво
-   - кнопка создать
-   - кнопка оплатить
-4. Поиск
-5. Админка:
-   - 
+# AP
+## E-commerce (Sneaker shop)
+### Login
+![login.png](src%2Fmain%2Fresources%2Fscreenshots%2Flogin.png)
+### Register
+![register.png](src%2Fmain%2Fresources%2Fscreenshots%2Fregister.png)
+### Catalog
+![index.png](src%2Fmain%2Fresources%2Fscreenshots%2Findex.png)
+### Offer
+![offer_details.png](src%2Fmain%2Fresources%2Fscreenshots%2Foffer_details.png)
+### Cart
+![cart.png](src%2Fmain%2Fresources%2Fscreenshots%2Fcart.png)
+### Order
+![order_details.png](src%2Fmain%2Fresources%2Fscreenshots%2Forder_details.png)
+### Profile
+![profile.png](src%2Fmain%2Fresources%2Fscreenshots%2Fprofile.png)
+### Admin Page
+![admin.png](src%2Fmain%2Fresources%2Fscreenshots%2Fadmin.png)
+### Admin Page (Offers)
+![offer_list.png](src%2Fmain%2Fresources%2Fscreenshots%2Foffer_list.png)
